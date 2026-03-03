@@ -1,0 +1,12 @@
+/* Footer Styles */
+.footer { border-top: 1px solid var(--border-light); background: var(--gradient-dark); color: rgba(255, 255, 255, 0.8); padding: 60px 0 32px; }
+.footerInner { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+.footerTop { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+.footerBrand h3 { font-size: 22px; font-weight: 800; color: white; margin-bottom: 12px; letter-spacing: -0.02em; }
+.footerBrand p { font-size: 14px; line-height: 1.7; color: rgba(255, 255, 255, 0.6); max-width: 320px; }
+.footerColumn h4 { font-size: 14px; font-weight: 700; color: white; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
+.footerColumn ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footerColumn a { font-size: 14px; color: rgba(255, 255, 255, 0.6); transition: color 0.2s; }
+.footerColumn a:hover { color: var(--primary-light); }
+.footerBottom { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: rgba(255, 255, 255, 0.4); }
+@media (max-width: 768px) { .footerTop { grid-template-columns: 1fr; gap: 32px; } }
