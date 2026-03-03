@@ -1,0 +1,50 @@
+/* ===== INTERACTIVE CARD HERO ===== */
+.heroSection { position: relative; width: 100%; min-height: 85vh; overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; cursor: default; user-select: none; }
+.heroBackground { position: absolute; top: 50%; left: 50%; width: calc(100% + 40px); height: calc(100% + 40px); background: url('/assets/hero/Background3.jpg') center/cover no-repeat; z-index: 0; will-change: transform; }
+.centerTypography { position: absolute; top: 50%; left: 50%; z-index: 10; text-align: center; pointer-events: none; width: 90%; max-width: 800px; transition: opacity 0.4s ease, transform 0.4s ease; will-change: transform; }
+.headlineHidden { opacity: 0 !important; pointer-events: none; }
+.mainTitle { color: #111; text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25); line-height: 1.1; display: flex; flex-direction: column; align-items: center; gap: 0; }
+.weText { font-family: 'EliceDigitalBaeum', sans-serif; font-size: clamp(24px, 4vw, 36px); font-weight: 800; margin: 0; opacity: 0; animation: bounceInText 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.bingoRow { margin: 0; opacity: 0; animation: bounceInText 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.3s; }
+.bingoHighlight { font-family: 'Nura', system-ui, sans-serif; font-weight: 800; font-size: clamp(48px, 8vw, 76px); }
+.playText { font-family: 'EliceDigitalBaeum', sans-serif; font-size: clamp(24px, 4vw, 36px); font-weight: 800; margin: 0; opacity: 0; animation: bounceInText 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 0.6s; }
+.subTitlesRow { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); z-index: 15; display: flex; flex-direction: row; align-items: center; gap: 16px; white-space: nowrap; font-family: 'EliceDigitalBaeum', sans-serif; font-size: clamp(16px, 2vw, 22px); font-weight: 800; color: #111; text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.15); opacity: 0; animation: bounceInText 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; animation-delay: 1s; }
+.subTitlesRow p { margin: 0; }
+.dotSeparator { color: #111; font-size: 14px; opacity: 0.6; }
+@keyframes bounceInText { 0% { opacity: 0; transform: scale(0.3) translateY(30px); } 60% { opacity: 1; transform: scale(1.05) translateY(-5px); } 80% { transform: scale(0.95) translateY(2px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+.dimOverlay { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.85); z-index: 90; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+.dimActive { opacity: 1; pointer-events: auto; backdrop-filter: blur(4px); }
+.messageOverlay { position: absolute; inset: 0; z-index: 95; display: flex; align-items: center; justify-content: flex-start; padding-left: calc(35% + 182px + 5vw); pointer-events: none; opacity: 0; transition: opacity 0.5s ease; }
+.messageOverlay.messageActive { opacity: 1; pointer-events: auto; }
+.messageContent { max-width: 400px; text-align: left; pointer-events: none; transform: translateY(20px); transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.messageActive .messageContent { transform: translateY(0); }
+.kickMessageBalance { color: #BD0558; font-size: clamp(24px, 3vh, 32px); font-weight: 700; margin-bottom: 16px; line-height: 1.3; }
+.kickMessageTruth { color: #7F28FF; font-size: clamp(24px, 3vh, 32px); font-weight: 700; margin-bottom: 16px; line-height: 1.3; }
+.emotionMessage { color: rgba(255, 255, 255, 0.8); font-size: clamp(16px, 2vh, 20px); font-weight: 400; line-height: 1.6; margin: 0; }
+.cardContainer { position: relative; width: 100%; height: 85vh; perspective: 1200px; z-index: 1; }
+.scatterWrapper { position: relative; width: 100%; height: 100%; }
+.card { position: absolute; width: 140px; height: 210px; border-radius: 10px; overflow: hidden; box-shadow: 0 6px 20px 5px rgba(63, 47, 72, 0.2); z-index: 1; transition: left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform, left, top; }
+.balanceCard { background-color: #610c39; }
+.truthCard { background-color: #2e0645; }
+.cardContent { position: absolute; inset: 0; padding: 20px 12px; display: flex; flex-direction: column; justify-content: space-between; }
+.cardTop { display: flex; justify-content: center; }
+.cardLabel { font-size: 0.625rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #ffffff; transition: color 0.6s ease; }
+.cardMiddle { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px 0; }
+.visualQuestion { font-size: 0.625rem; font-weight: 700; color: #fff; text-align: center; line-height: 1.4; word-break: keep-all; margin: 0; text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); transition: color 0.6s ease; }
+.cardBottom { min-height: 28px; }
+.visualChoices { display: flex; flex-direction: row; justify-content: space-between; gap: 8px; }
+.visualChoiceBtn { flex: 1; padding: 5px 0; border: 1px solid #f4e7e8; border-radius: 5px; color: #fff; font-size: 0.625rem; font-weight: 600; text-align: center; white-space: nowrap; background: transparent; transition: color 0.6s ease, border-color 0.6s ease; }
+.visualInput { height: 27px; width: 100%; background-color: #f0e7f4; border-radius: 5px; border: 1px solid #f4e7e8; box-shadow: inset 2px 2px 4px 0px rgba(0, 0, 0, 0.25); transition: background-color 0.6s ease; }
+.selectedCard.balanceCard .cardLabel, .selectedCard.balanceCard .visualQuestion { color: #F4E7E8; }
+.selectedCard.balanceCard .visualChoiceBtn { color: #F4E7E8; border-color: #F4E7E8; }
+.selectedCard.truthCard .cardLabel, .selectedCard.truthCard .visualQuestion { color: #F0E7F4; }
+.selectedCard.truthCard .visualInput { background-color: #C7BFCD; border-color: #F0E7F4; }
+.scrollDown { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 8px; color: rgba(255, 255, 255, 0.4); font-size: 0.75rem; animation: bounce 2s ease-in-out infinite; }
+.scrollArrow { width: 24px; height: 24px; border-right: 2px solid rgba(255, 255, 255, 0.4); border-bottom: 2px solid rgba(255, 255, 255, 0.4); transform: rotate(45deg); }
+@keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+.coreMessage { position: absolute; top: 60%; left: 50%; transform: translateX(-50%); z-index: 20; text-align: center; pointer-events: none; }
+.coreMessageLine { font-family: 'EliceDigitalBaeum', 'Alexandria', sans-serif; font-size: clamp(54px, 7.5vw, 96px); font-weight: 900; color: #ffffff; text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5); margin: 0; letter-spacing: 0.05em; white-space: nowrap; opacity: 0; transform: translateY(20px); transition: opacity 1.2s ease, transform 1.2s ease; line-height: 1.3; }
+.coreLineVisible { opacity: 1; transform: translateY(0); }
+.miniGame { color: #E91E63; }
+@media (max-width: 768px) { .card { width: 110px; height: 154px; } .cardLabel { font-size: 0.5rem; } .visualQuestion { font-size: 0.75rem; } .visualChoiceBtn { font-size: 0.65rem; padding: 4px 2px; } .visualInput { height: 20px; } .messageOverlay { flex-direction: column; align-items: center; justify-content: flex-start; padding-left: 0; padding-top: 100%; } .messageContent { text-align: center; max-width: 90vw; } .kickMessageBalance, .kickMessageTruth { font-size: clamp(16px, 4vw, 22px); margin-bottom: 8px; } .emotionMessage { font-size: clamp(13px, 3vw, 16px); } }
+@media (max-width: 480px) { .heroSection { min-height: 85svh; } .card { width: 95px; height: 133px; } .cardLabel { font-size: 0.45rem; } .visualQuestion { font-size: 0.65rem; } .visualChoiceBtn { font-size: 0.55rem; padding: 3px 2px; } .visualInput { height: 16px; } }
