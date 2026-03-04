@@ -556,14 +556,15 @@
 
 /* ===== 코어 메시지 ===== */
 .coreMessage {
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
     flex-shrink: 0;
     z-index: 20;
     text-align: center;
-    pointer-events: auto;
+    pointer-events: none;
     padding: 28px 24px 15vh;
-    margin-top: -30vh;
     background: linear-gradient(to bottom,
             transparent 0%,
             rgba(5, 0, 8, 0.6) 35%,
@@ -575,6 +576,7 @@
 
 .coreMessageShow {
     opacity: 1;
+    pointer-events: auto;
 }
 
 
