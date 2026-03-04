@@ -333,6 +333,22 @@
     pointer-events: auto;
 }
 
+/* ===== heroSection 전체 딖 오버레이 ===== */
+.fullDimOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 15;
+    background: rgba(0, 0, 0, 0);
+    pointer-events: none;
+    transition: background 0.4s ease;
+}
+
+.fullDimActive {
+    background: rgba(0, 0, 0, 0.55);
+    pointer-events: auto;
+    backdrop-filter: blur(2px);
+}
+
 .messageContent {
     max-width: 400px;
     text-align: left;
@@ -681,11 +697,13 @@
         overflow: hidden;
     }
 
-    /* 코어 메시지: position:absolute로 hero 중간 blank 방지 */
+    /* 코어 메시지: 모바일에서 카드 아래 위치로 이동 */
     .coreMessage {
         position: absolute;
-        bottom: 0;
-        padding: 20px 16px 40px;
+        bottom: auto;
+        top: 55%;
+        padding: 20px 16px 24px;
+        z-index: 10;
     }
 
     .cardContainer {

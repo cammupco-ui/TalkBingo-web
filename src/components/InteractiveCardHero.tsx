@@ -197,7 +197,12 @@ export default function InteractiveCardHero() {
         <>
             <section ref={heroRef} className={styles.heroSection} onMouseMove={handlePointerMove} onTouchMove={handlePointerMove} onMouseUp={handlePointerUp}>
                 <div className={styles.heroBackground} />
-                {/* 오로라 블롭 */}
+                {/* 전체 히어로 딤 오버레이 - coreMessage까지 덮음 */}
+                <div
+                    className={`${styles.fullDimOverlay} ${selectedCardIdx !== null ? styles.fullDimActive : ''}`}
+                    onClick={() => handleSelectCard(null)}
+                />
+
                 <div className={`${styles.auroraBlob} ${styles.auroraBlob1}`} />
                 <div className={`${styles.auroraBlob} ${styles.auroraBlob2}`} />
                 <div className={`${styles.auroraBlob} ${styles.auroraBlob3}`} />
@@ -206,7 +211,7 @@ export default function InteractiveCardHero() {
                     <div className={styles.scatterWrapper}>
 
                         {/* 중앙 타이포그래피 영역 */}
-                        <div className={styles.centerTypography} style={{ opacity: isMounted ? 1 : 0, top: isMobile ? '38%' : '40%', transform: `translate(-50%, -50%) translate(${isMobile ? 0 : cardOffsets[CARDS.length].x * 0.05}px, ${isMobile ? 0 : cardOffsets[CARDS.length].y * 0.05}px)` }}>
+                        <div className={styles.centerTypography} style={{ opacity: isMounted ? 1 : 0, top: isMobile ? '30%' : '40%', transform: `translate(-50%, -50%) translate(${isMobile ? 0 : cardOffsets[CARDS.length].x * 0.05}px, ${isMobile ? 0 : cardOffsets[CARDS.length].y * 0.05}px)` }}>
 
                             {/* 페이즈 1: 우리 BINGO 한판할까? */}
                             <div className={`${styles.textGroup} ${textFaded ? styles.textGroupFaded : ''}`}>
@@ -241,7 +246,7 @@ export default function InteractiveCardHero() {
                             const currentTransition = 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s';
                             const cardStyle: React.CSSProperties = isSelected
                                 ? { left: isMobile ? '50%' : '35%', top: isMobile ? '30%' : '30%', transform: `translate(-50%, -50%) rotate(0deg) scale(${isMobile ? 1.5 : 2.6})`, zIndex: 999, cursor: 'default', transitionDelay: '0s', opacity: 1, transition: 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s' }
-                                : { left: '50%', top: isMobile ? '38%' : '40%', transform: currentTransform, opacity: isMounted ? 1 : 0, zIndex: isAnimatingOut ? 999 : (Math.round(Math.abs(pos.depth) * 10) + 10), cursor: isDone ? 'grab' : 'default', transition: pinned ? 'opacity 0.8s' : currentTransition, transitionDelay: (!isMounted || animatingOutIdx !== null) ? '0s' : `${0.3 + i * 0.3}s` };
+                                : { left: '50%', top: isMobile ? '30%' : '40%', transform: currentTransform, opacity: isMounted ? 1 : 0, zIndex: isAnimatingOut ? 999 : (Math.round(Math.abs(pos.depth) * 10) + 10), cursor: isDone ? 'grab' : 'default', transition: pinned ? 'opacity 0.8s' : currentTransition, transitionDelay: (!isMounted || animatingOutIdx !== null) ? '0s' : `${0.3 + i * 0.3}s` };
                             const isSelectedStatus = isSelected || isAnimatingOut;
                             // 핀된 카드는 패럴랩스 미적용, 나머지는 카드별 독립 offset 적용
                             const parallaxTransform = isSelectedStatus ? `translate(0px, 0px)` : pinned ? `translate(0px, 0px)` : `translate(${isMobile ? 0 : cardOffsets[i].x * pos.depth * 2}px, ${isMobile ? 0 : cardOffsets[i].y * pos.depth * 2}px)`;
@@ -282,7 +287,8 @@ export default function InteractiveCardHero() {
 
 
                 {/* 코어 메시지 - cardContainer 바로 아래 */}
-                <div className={`${styles.coreMessage} ${showCoreLine1 ? styles.coreMessageShow : ''}`} style={{ zIndex: selectedCardIdx !== null ? 5 : 20 }}>
+                <div className={`${styles.coreMessage} ${showCoreLine1 ? styles.coreMessageShow : ''}`}>
+
                     <p className={`${styles.coreMessageLine} ${showCoreLine1 ? styles.coreLineVisible : ''}`}>밸런스, 진실 게임 퀴즈로 대화하고 빙고게임도 하고</p>
 
                     {/* CTA 버튼 */}
