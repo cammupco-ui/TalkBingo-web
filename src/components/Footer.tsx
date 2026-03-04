@@ -6,10 +6,7 @@ export default function Footer() {
         <footer className={styles.footer}>
             <div className={styles.footerInner}>
                 <div className={styles.footerTop}>
-                    <div className={styles.footerBrand}>
-                        <h3>🎯 TalkBingo</h3>
-                        <p>대화로 빙고를 완성하세요! 연인, 가족, 친구와 함께하는 새로운 커뮤니케이션 게임.</p>
-                    </div>
+
                     <div className={styles.footerColumn}>
                         <h4>서비스</h4>
                         <ul>
