@@ -409,18 +409,18 @@
     }
 
     .chatLayout {
-        flex-direction: row;
-        gap: 12px;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
     }
 
     .chatChar {
-        width: 120px;
-        height: 170px;
+        display: none;
     }
 
     .bingoCarouselWrapper {
         height: auto;
-        min-height: 520px;
+        min-height: 380px;
     }
 
     .bingoTransition {
