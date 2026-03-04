@@ -1,0 +1,13 @@
+<svg width="1280" height="344" viewBox="0 990 1280 344" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="990" x2="0" y2="1334" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="white"/>
+      <stop offset="100%" stop-color="#F4E7E8"/>
+    </linearGradient>
+  </defs>
+  <!-- 흰색→#F4E7E8 그라데이션 배경 -->
+  <path d="M0 990H1280V1334H0V990Z" fill="url(#bgGrad)"/>
+  <!-- 좌우 아치 (#F4E7E8 고정) -->
+  <path d="M740 1334C740 1238.45 977.768 1011 1280 1011V1334H740Z" fill="#F4E7E8"/>
+  <path d="M540 1334C540 1238.45 302.232 1011 0 1011V1334H540Z" fill="#F4E7E8"/>
+</svg>
