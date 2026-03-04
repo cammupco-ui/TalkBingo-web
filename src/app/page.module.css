@@ -409,9 +409,10 @@
     }
 
     .chatLayout {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        gap: 0;
+        justify-content: center;
+        gap: 8px;
     }
 
     .chatChar {
