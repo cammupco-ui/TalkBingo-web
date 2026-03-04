@@ -29,7 +29,7 @@ export default function WhenToUseSection() {
         <section className={styles.section} ref={sectionRef}>
             <div className="container">
                 <h2 className={`${styles.title} ${visible ? styles.titleVisible : ''}`}>
-                    이런 순간, TALKBINGO로 초대해보세요
+                    이런 순간,<br />TALKBINGO로 초대해보세요
                 </h2>
                 <ul className={styles.list}>
                     {REASONS.map((reason, i) => (
