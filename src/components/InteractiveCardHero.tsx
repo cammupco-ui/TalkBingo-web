@@ -282,7 +282,7 @@ export default function InteractiveCardHero() {
 
 
                 {/* 코어 메시지 - cardContainer 바로 아래 */}
-                <div className={`${styles.coreMessage} ${showCoreLine1 ? styles.coreMessageShow : ''}`}>
+                <div className={`${styles.coreMessage} ${showCoreLine1 ? styles.coreMessageShow : ''}`} style={{ zIndex: selectedCardIdx !== null ? 5 : 20 }}>
                     <p className={`${styles.coreMessageLine} ${showCoreLine1 ? styles.coreLineVisible : ''}`}>밸런스, 진실 게임 퀴즈로 대화하고 빙고게임도 하고</p>
 
                     {/* CTA 버튼 */}
