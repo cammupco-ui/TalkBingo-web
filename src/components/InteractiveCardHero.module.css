@@ -565,11 +565,6 @@
     text-align: center;
     pointer-events: none;
     padding: 28px 24px 15vh;
-    background: linear-gradient(to bottom,
-            transparent 0%,
-            rgba(5, 0, 8, 0.6) 35%,
-            rgba(5, 0, 8, 0.92) 65%,
-            #000000 100%);
     opacity: 0;
     transition: opacity 1.2s ease;
 }
