@@ -676,7 +676,8 @@
 
     /* 모바일: 자연 플로우로 배치 (음수 margin 제거) */
     .heroSection {
-        height: auto;
+        height: 100svh;
+        min-height: 700px;
         overflow: hidden;
         /* 섹션 경계 안에서 콘텐츠 유지 */
     }
