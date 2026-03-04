@@ -337,16 +337,15 @@
 .fullDimOverlay {
     position: absolute;
     inset: 0;
-    z-index: 15;
+    z-index: 25;
     background: rgba(0, 0, 0, 0);
     pointer-events: none;
     transition: background 0.4s ease;
 }
 
 .fullDimActive {
-    background: rgba(0, 0, 0, 0.55);
+    background: rgba(0, 0, 0, 0.78);
     pointer-events: auto;
-    backdrop-filter: blur(2px);
 }
 
 .messageContent {
@@ -397,7 +396,6 @@
     flex: 1;
     min-height: 0;
     perspective: 1200px;
-    z-index: 1;
     flex-shrink: 0;
 }
 
@@ -577,7 +575,7 @@
     left: 0;
     width: 100%;
     flex-shrink: 0;
-    z-index: 20;
+    z-index: 10;
     text-align: center;
     pointer-events: none;
     padding: 28px 24px 15vh;
