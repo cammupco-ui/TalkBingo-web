@@ -676,15 +676,17 @@
 
     /* 모바일: 자연 플로우로 배치 (음수 margin 제거) */
     .heroSection {
-        height: 100svh;
-        min-height: 700px;
+        height: auto;
+        min-height: 100svh;
         overflow: hidden;
         /* 섹션 경계 안에서 콘텐츠 유지 */
     }
 
-    /* 코어 메시지: previewSection이 별도 프레임으로 분리되어 padding 대폭 축소 */
+    /* 코어 메시지: flex flow로 전환하여 hero가 자동으로 늘어남 */
     .coreMessage {
-        margin-top: 0;
+        position: relative;
+        bottom: auto;
+        margin-top: auto;
         padding: 20px 16px 40px;
     }
 
