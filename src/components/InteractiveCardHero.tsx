@@ -296,7 +296,7 @@ export default function InteractiveCardHero() {
 
             </section>
             {/* 스크롤 힌트 - heroSection 바깥, position:fixed 정상 동작 */}
-            <div className={styles.scrollDown} style={{ opacity: heroVisible ? 1 : 0, transition: 'opacity 0.5s ease' }}>
+            <div className={styles.scrollDown} style={{ opacity: heroVisible && !isDone ? 1 : 0, transition: 'opacity 0.5s ease' }}>
                 <span>스크롤</span>
                 <div className={styles.scrollArrow} />
             </div>
