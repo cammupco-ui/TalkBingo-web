@@ -396,6 +396,7 @@
     flex: 1;
     min-height: 0;
     perspective: 1200px;
+    z-index: 1;
     flex-shrink: 0;
 }
 

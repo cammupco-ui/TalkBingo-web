@@ -197,11 +197,7 @@ export default function InteractiveCardHero() {
         <>
             <section ref={heroRef} className={styles.heroSection} onMouseMove={handlePointerMove} onTouchMove={handlePointerMove} onMouseUp={handlePointerUp}>
                 <div className={styles.heroBackground} />
-                {/* 전체 히어로 딤 오버레이 - coreMessage까지 덮음 */}
-                <div
-                    className={`${styles.fullDimOverlay} ${selectedCardIdx !== null ? styles.fullDimActive : ''}`}
-                    onClick={() => handleSelectCard(null)}
-                />
+
 
                 <div className={`${styles.auroraBlob} ${styles.auroraBlob1}`} />
                 <div className={`${styles.auroraBlob} ${styles.auroraBlob2}`} />
@@ -287,8 +283,7 @@ export default function InteractiveCardHero() {
 
 
                 {/* 코어 메시지 - cardContainer 바로 아래 */}
-                <div className={`${styles.coreMessage} ${showCoreLine1 ? styles.coreMessageShow : ''}`}>
-
+                <div className={`${styles.coreMessage} ${showCoreLine1 ? styles.coreMessageShow : ''}`} style={{ opacity: selectedCardIdx !== null ? 0 : undefined, pointerEvents: selectedCardIdx !== null ? 'none' : undefined }}>
                     <p className={`${styles.coreMessageLine} ${showCoreLine1 ? styles.coreLineVisible : ''}`}>밸런스, 진실 게임 퀴즈로 대화하고 빙고게임도 하고</p>
 
                     {/* CTA 버튼 */}
