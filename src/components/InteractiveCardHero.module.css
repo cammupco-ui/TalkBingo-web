@@ -689,8 +689,8 @@
     }
 
     .cardContainer {
-        height: 40svh;
-        flex: none;
+        flex: 1;
+        min-height: 40svh;
         flex-shrink: 0;
         overflow: hidden;
     }
