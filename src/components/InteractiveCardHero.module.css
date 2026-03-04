@@ -674,19 +674,17 @@
 /* ===== 반응형 ===== */
 @media (max-width: 768px) {
 
-    /* 모바일: 자연 플로우로 배치 (음수 margin 제거) */
+    /* 모바일: absolute 유지, min-height로 overflow 방지 */
     .heroSection {
-        height: auto;
-        min-height: 100svh;
+        height: 100svh;
+        min-height: 780px;
         overflow: hidden;
-        /* 섹션 경계 안에서 콘텐츠 유지 */
     }
 
-    /* 코어 메시지: flex flow로 전환하여 hero가 자동으로 늘어남 */
+    /* 코어 메시지: position:absolute로 hero 중간 blank 방지 */
     .coreMessage {
-        position: relative;
-        bottom: auto;
-        margin-top: auto;
+        position: absolute;
+        bottom: 0;
         padding: 20px 16px 40px;
     }
 
