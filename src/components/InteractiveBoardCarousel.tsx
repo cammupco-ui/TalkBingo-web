@@ -18,16 +18,15 @@ const CAROUSEL_SCREENSHOTS = [
     { src: '/images/carousel/IMG_13.png', label: '초대 화면', title: '게임종료', desc: '빙고라인 한줄 마다, "게임 지속 여부"를 결정 하실 수 있어요', color: '#EC4899' },
 ];
 
-/** 각도 간격 (카드 1개당 몇 도 벌어지는지) */
-const ANGLE_STEP = 14; // degrees per card
-/** 최대 몇 장까지 보여줄지 (양쪽) */
+/** rotateX 각도 간격 */
+const ANGLE_STEP = 20; // degrees per card slot
+/** 최대 보이는 카드 수 (양쪽) */
 const MAX_VISIBLE = 3;
 
 export default function InteractiveBoardCarousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
     const [viewportWidth, setViewportWidth] = useState(375);
-    // splashKey: currentIndex 변경마다 새 key → CSS animation 재실행
     const [splashKey, setSplashKey] = useState(0);
     const totalItems = CAROUSEL_SCREENSHOTS.length;
 
@@ -44,35 +43,42 @@ export default function InteractiveBoardCarousel() {
     const handleCardClick = useCallback((index: number) => {
         if (index !== currentIndex) {
             setCurrentIndex(index);
-            setSplashKey(k => k + 1);
         } else {
-            const next = (currentIndex + 1) % totalItems;
-            setCurrentIndex(next);
-            setSplashKey(k => k + 1);
+            setCurrentIndex(prev => (prev + 1) % totalItems);
         }
+        setSplashKey(k => k + 1);
     }, [currentIndex, totalItems]);
 
     const currentScreen = CAROUSEL_SCREENSHOTS[currentIndex];
 
-    // 카드 / 팬 크기
-    const cardW = isMobile ? Math.round(Math.min(110, viewportWidth * 0.26)) : 180;
+    // 카드 크기
+    const cardW = isMobile ? Math.round(Math.min(120, viewportWidth * 0.29)) : 196;
     const cardH = cardW * 2;
-    // 팬 컨테이너 높이 = 중앙 카드 높이 + 상단 여백
-    const fanH = cardH + 32;
+    // 3D 휠 반경 — 카드가 rotateX 후 translateZ로 나오는 거리
+    const radius = isMobile
+        ? Math.round(Math.min(160, viewportWidth * 0.38))
+        : 320;
+    // perspective — 원근 깊이감
+    const persp = isMobile ? 700 : 1100;
 
     return (
         <div className={styles.carouselContainer}>
-            {/* 데스크탑 왼쪽 텍스트 */}
+
+            {/* 데스크탑 왼쪽 제목 */}
             <div className={styles.carouselTextLeft}>
                 <h3 className={styles.carouselTitle} style={{ color: currentScreen.color }}>
                     {currentScreen.title}
                 </h3>
             </div>
 
-            {/* ── Fan 컨테이너 ── */}
+            {/* ── 3D Wheel 컨테이너 ── */}
             <div
-                className={styles.fanWrapper}
-                style={{ height: `${fanH}px` }}
+                className={styles.wheelScene}
+                style={{
+                    width: `${cardW}px`,
+                    height: `${cardH}px`,
+                    perspective: `${persp}px`,
+                }}
             >
                 {CAROUSEL_SCREENSHOTS.map((screen, index) => {
                     let diff = index - currentIndex;
@@ -83,38 +89,40 @@ export default function InteractiveBoardCarousel() {
                     const absDiff = Math.abs(diff);
                     if (absDiff > MAX_VISIBLE) return null;
 
-                    // 불투명도: 중앙 1.0, ±1 0.75, ±2 0.45, ±3 0.2
-                    const opacity = isCenter ? 1 : Math.max(0.1, 1 - absDiff * 0.28);
+                    // 중앙에서 멀어질수록 흐려짐
+                    const opacity = isCenter ? 1 : Math.max(0.08, 1 - absDiff * 0.32);
                     const zIndex = isCenter ? 50 : 40 - absDiff * 10;
 
-                    // ── 팬 카드: 하단 중심축(transform-origin: 50% 100%)으로 회전
-                    //   카드 한 면이 중심을 향하는 방사형 배치
-                    let transform: string;
-                    if (isCenter) {
-                        // 중앙 카드: 팬 컨테이너 상단 중앙에 위치 + scale
-                        transform = `translateX(-50%) translateY(0px) scale(1.12)`;
-                    } else {
-                        const angle = diff * ANGLE_STEP;
-                        // 먼저 하단 위치(bottom:0)로 배치 후 rotate → 팬 효과
-                        transform = `translateX(-50%) rotate(${angle}deg)`;
-                    }
+                    // 3D Ferris Wheel 변환:
+                    //   rotateX(θ)       → 수직 휠로 배치 (위아래 카드가 뒤로 기울어짐)
+                    //   translateZ(r)    → 카드가 원통 표면에 위치
+                    const theta = diff * ANGLE_STEP;
+                    const transform = `rotateX(${theta}deg) translateZ(${radius}px)`;
 
                     return (
                         <div
-                            key={screen.src}
-                            // 중앙 카드에 splashKey 붙여 애니메이션 재시작
-                            {...(isCenter ? { 'data-splash-key': splashKey } : {})}
-                            className={`${styles.fanCard} ${isCenter ? styles.fanCenter : ''}`}
+                            key={isCenter ? `center-${splashKey}` : screen.src}
+                            className={`${styles.wheelCard} ${isCenter ? styles.wheelCenter : ''}`}
+                            // splashKey를 CSS variable로 주입해 animation 재시작
+                            {...(isCenter
+                                ? {
+                                    style: {
+                                        '--glow-color': currentScreen.color,
+                                        animationName: styles.splashGlow,
+                                        animationDuration: '0.55s',
+                                    } as React.CSSProperties
+                                }
+                                : {}
+                            )}
                             style={{
                                 width: `${cardW}px`,
                                 height: `${cardH}px`,
                                 opacity,
                                 zIndex,
                                 transform,
-                                // 팬 회전축: 카드 하단 중앙
-                                transformOrigin: isCenter ? '50% 100%' : '50% 100%',
-                                // 중앙 카드 glow 색상
-                                ...(isCenter ? { '--glow-color': currentScreen.color } as React.CSSProperties : {}),
+                                ...(isCenter ? {
+                                    '--glow-color': currentScreen.color,
+                                } as React.CSSProperties : {}),
                             }}
                             onClick={() => handleCardClick(index)}
                         >

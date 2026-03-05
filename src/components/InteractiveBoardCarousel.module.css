@@ -54,6 +54,74 @@
     transform-style: preserve-3d;
 }
 
+/* ===== 3D Ferris Wheel ===== */
+
+/* 원근 씬: perspective는 JS에서 인라인으로 주입 */
+.wheelScene {
+    position: relative;
+    transform-style: preserve-3d;
+    flex-shrink: 0;
+}
+
+/* 각 카드: 3D 공간에 배치 */
+.wheelCard {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 28px;
+    border: 6px solid #222;
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    backface-visibility: hidden;
+    /* 이동은 JS transform으로, 부드러운 전환 */
+    transition:
+        transform 0.6s cubic-bezier(0.34, 1.2, 0.64, 1),
+        opacity 0.5s ease,
+        box-shadow 0.4s ease;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    will-change: transform, opacity;
+}
+
+.wheelCard:not(.wheelCenter):hover {
+    filter: brightness(1.15);
+}
+
+/* ── 중앙 카드: splash + glow ── */
+@keyframes splashGlow {
+    0% {
+        opacity: 0;
+        filter: brightness(4) saturate(2) blur(4px);
+        box-shadow: 0 0 120px 40px var(--glow-color, #BD0558);
+    }
+
+    40% {
+        opacity: 1;
+        filter: brightness(1.8) saturate(1.4) blur(0px);
+        box-shadow: 0 0 80px 20px var(--glow-color, #BD0558);
+    }
+
+    70% {
+        filter: brightness(1.2);
+    }
+
+    100% {
+        opacity: 1;
+        filter: brightness(1);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 40px var(--glow-color, rgba(189, 5, 88, 0.5));
+    }
+}
+
+.wheelCenter {
+    animation: splashGlow 0.6s ease-out both;
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.7),
+        0 0 40px var(--glow-color, rgba(189, 5, 88, 0.5));
+    border-color: #444;
+    cursor: default;
+}
+
 /* ===== Fan 레이아웃 ===== */
 
 /* 팬 전체를 감싸는 컨테이너 — 카드들이 하단 중심축에서 방사형으로 펼쳐짐 */
