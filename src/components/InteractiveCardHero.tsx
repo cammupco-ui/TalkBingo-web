@@ -124,8 +124,8 @@ export default function InteractiveCardHero() {
         const t4 = setTimeout(() => setTextFaded(true), 5500);
         const t5 = setTimeout(() => setShowLogoIcon(true), 6000);
         const t6 = setTimeout(() => setShowLogoText(true), 6500);
-        const t7 = setTimeout(() => { setShowCoreLine1(true); setIsDone(true); }, 8000);
-        const t8 = setTimeout(() => setShowCoreLine2(true), 9200);
+        const t7 = setTimeout(() => { setShowCoreLine1(true); setIsDone(true); }, 6800);
+        const t8 = setTimeout(() => setShowCoreLine2(true), 7800);
         return () => { [t1, t2, t3, t4, t5, t6, t7, t8].forEach(clearTimeout); };
     }, [isMounted]);
 
@@ -284,7 +284,7 @@ export default function InteractiveCardHero() {
 
                 {/* 코어 메시지 - cardContainer 바로 아래 */}
                 <div className={`${styles.coreMessage} ${showCoreLine1 ? styles.coreMessageShow : ''}`} style={{ opacity: selectedCardIdx !== null ? 0 : undefined, pointerEvents: selectedCardIdx !== null ? 'none' : undefined }}>
-                    <p className={`${styles.coreMessageLine} ${showCoreLine1 ? styles.coreLineVisible : ''}`}>밸런스, 진실 게임 퀴즈로 대화하고 빙고게임도 하고</p>
+                    <p className={`${styles.coreMessageLine} ${showCoreLine1 ? styles.coreLineVisible : ''}`}>밸런스, 진실게임 퀴즈로 대화하고<br />빙고게임도 하고</p>
 
                     {/* CTA 버튼 */}
                     <div className={`${styles.ctaButtons} ${showCoreLine2 ? styles.ctaVisible : ''}`}>

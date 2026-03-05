@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 32px 0;
+    padding: 20px 0;
     position: relative;
     z-index: 1;
 }
@@ -13,7 +13,7 @@
 .bingoTransition {
     position: relative;
     background-color: #000000;
-    padding: 20px 0 80px;
+    padding: 0px 0 80px;
     z-index: 20;
     display: flex;
     flex-direction: column;
