@@ -49,14 +49,12 @@ export default function InteractiveBoardCarousel() {
     const deckWidth = isMobile ? Math.round(Math.min(115, viewportWidth * 0.28)) : 196;
     const deckHeight = deckWidth * 2;
     // perspective: 모바일에서 크게 설정해 측면 카드가 더 벌어져 보이게 함
-    const perspective = isMobile ? 2400 : 1200;
-    // radius: 측면 카드가 화면 밖으로 나가지 않는 최댓값으로 clamp
-    // 실제 screen-space 수평 오프셋 ≈ radius × sin(θ) × (perspective / (perspective + radius×cos(θ)))
-    // θ = 360/11 ≈ 32.7°; sin≈0.54, cos≈0.84
-    // 근사: screen_x ≈ radius × 0.54 × (perspective / (perspective + radius×0.84))
-    // 화면 절반 - deckWidth/2 - 여백 padding=20 이하로 제한
-    const maxRadius = isMobile ? Math.round(viewportWidth / 2 - deckWidth / 2 - 20) : 266;
-    const radius = isMobile ? Math.min(Math.round(viewportWidth * 0.40), maxRadius) : 266;
+    const perspective = isMobile ? 2400 : 1800;
+    // radius:
+    //   데스크탑: 400px (11카드, 32.7° 간격에서 겹침 없는 최소 반경 계산값)
+    //   모바일: viewport 비율 기반 + 화면 밖 초과 방지 clamp
+    const maxRadius = isMobile ? Math.round(viewportWidth / 2 - deckWidth / 2 - 20) : 400;
+    const radius = isMobile ? Math.min(Math.round(viewportWidth * 0.40), maxRadius) : 400;
 
     return (
         <div className={styles.carouselContainer}>
