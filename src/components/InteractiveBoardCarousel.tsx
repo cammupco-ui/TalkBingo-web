@@ -43,15 +43,34 @@ export default function InteractiveBoardCarousel() {
     };
 
     const currentScreen = CAROUSEL_SCREENSHOTS[currentIndex];
-    // 모바일: 220px 목표, 단 화면 절반 - 80px을 초과하지 않도록 clamp
-    const radius = isMobile ? Math.min(220, viewportWidth / 2 - 80) : 266;
+
+    // ── 비율 기반 크기 계산 ───────────────────────────────────────────
+    // 데스크탑은 고정값 사용, 모바일은 viewport 비율로 계산
+    const deckWidth = isMobile ? Math.round(Math.min(115, viewportWidth * 0.28)) : 196;
+    const deckHeight = deckWidth * 2;
+    // perspective: 모바일에서 크게 설정해 측면 카드가 더 벌어져 보이게 함
+    const perspective = isMobile ? 2400 : 1200;
+    // radius: 측면 카드가 화면 밖으로 나가지 않는 최댓값으로 clamp
+    // 실제 screen-space 수평 오프셋 ≈ radius × sin(θ) × (perspective / (perspective + radius×cos(θ)))
+    // θ = 360/11 ≈ 32.7°; sin≈0.54, cos≈0.84
+    // 근사: screen_x ≈ radius × 0.54 × (perspective / (perspective + radius×0.84))
+    // 화면 절반 - deckWidth/2 - 여백 padding=20 이하로 제한
+    const maxRadius = isMobile ? Math.round(viewportWidth / 2 - deckWidth / 2 - 20) : 266;
+    const radius = isMobile ? Math.min(Math.round(viewportWidth * 0.40), maxRadius) : 266;
 
     return (
         <div className={styles.carouselContainer}>
             <div className={styles.carouselTextLeft}>
                 <h3 className={styles.carouselTitle} style={{ color: currentScreen.color }}>{currentScreen.title}</h3>
             </div>
-            <div className={styles.deck}>
+            <div
+                className={styles.deck}
+                style={isMobile ? {
+                    width: `${deckWidth}px`,
+                    height: `${deckHeight}px`,
+                    perspective: `${perspective}px`,
+                } : undefined}
+            >
                 {CAROUSEL_SCREENSHOTS.map((screen, index) => {
                     let diff = index - currentIndex;
                     if (diff > totalItems / 2) { diff -= totalItems; } else if (diff < -totalItems / 2) { diff += totalItems; }

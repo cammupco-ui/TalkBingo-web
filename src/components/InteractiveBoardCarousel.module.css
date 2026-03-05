@@ -48,8 +48,8 @@
 
 .deck {
     position: relative;
-    width: clamp(140px, 15vw, 196px);
-    height: clamp(280px, 30vw, 392px);
+    width: clamp(100px, 15vw, 196px);
+    height: clamp(200px, 30vw, 392px);
     perspective: 1200px;
     transform-style: preserve-3d;
 }
@@ -203,10 +203,7 @@
         position: relative;
     }
 
-    .deck {
-        width: 130px;
-        height: 260px;
-    }
+    /* .deck width/height/perspective는 JS 인라인 스타일로 동적 제어 */
 
     .card {
         border-width: 6px;
