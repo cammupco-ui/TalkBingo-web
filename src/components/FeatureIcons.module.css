@@ -1,0 +1,255 @@
+/* ===== FeatureIcons animations ===== */
+
+/* 말풍선 팝업 */
+@keyframes bubble1 {
+
+    0%,
+    100% {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+
+    40% {
+        transform: scale(1.12) translateY(-3px);
+        opacity: 1;
+    }
+
+    60% {
+        transform: scale(0.95) translateY(0);
+        opacity: 0.7;
+    }
+}
+
+@keyframes bubble2 {
+
+    0%,
+    40% {
+        transform: scale(0.9) translateY(2px);
+        opacity: 0.5;
+    }
+
+    70%,
+    100% {
+        transform: scale(1.08) translateY(-2px);
+        opacity: 1;
+    }
+}
+
+/* 마이크 */
+@keyframes wave1 {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+@keyframes wave2 {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.4;
+    }
+
+    50% {
+        transform: scale(2.0);
+        opacity: 0;
+    }
+}
+
+@keyframes micBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+/* 게임 컨트롤러 */
+@keyframes controllerWiggle {
+
+    0%,
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    20% {
+        transform: rotate(-8deg) scale(1.08);
+    }
+
+    40% {
+        transform: rotate(8deg) scale(1.05);
+    }
+
+    60% {
+        transform: rotate(-5deg) scale(1.03);
+    }
+
+    80% {
+        transform: rotate(3deg) scale(1.01);
+    }
+}
+
+/* 지구본 */
+@keyframes globePulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 0.9;
+    }
+}
+
+/* 하트 상승 */
+@keyframes heartRise1 {
+    0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-18px) scale(1.1);
+        opacity: 0;
+    }
+}
+
+@keyframes heartRise2 {
+    0% {
+        transform: translateY(0) scale(0.7);
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-22px) scale(1.0);
+        opacity: 0;
+    }
+}
+
+@keyframes heartRise3 {
+    0% {
+        transform: translateY(0) scale(0.9);
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(-20px) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* 트로피 */
+@keyframes trophyGlow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 2px rgba(250, 200, 0, 0.4));
+        transform: scale(1);
+    }
+
+    50% {
+        filter: drop-shadow(0 0 10px rgba(250, 200, 0, 0.9)) drop-shadow(0 0 20px rgba(250, 200, 0, 0.4));
+        transform: scale(1.06);
+    }
+}
+
+@keyframes starSpin {
+    0% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1.3);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1);
+        opacity: 1;
+    }
+}
+
+/* ===== 애니메이션 적용 클래스 ===== */
+.bubble1 {
+    animation: bubble1 2.4s ease-in-out infinite;
+}
+
+.bubble2 {
+    animation: bubble2 2.4s ease-in-out infinite;
+}
+
+.wave1 {
+    animation: wave1 1.8s ease-out infinite;
+    transform-origin: 50% 50%;
+}
+
+.wave2 {
+    animation: wave2 1.8s ease-out infinite 0.3s;
+    transform-origin: 50% 50%;
+}
+
+.micGroup {
+    animation: micBounce 1.2s ease-in-out infinite;
+}
+
+.controller {
+    animation: controllerWiggle 1.6s ease-in-out infinite;
+    transform-origin: 50% 50%;
+}
+
+.globeLines {
+    animation: globePulse 2s ease-in-out infinite;
+    transform-origin: 50% 50%;
+}
+
+.heartRise1 {
+    animation: heartRise1 2s ease-out infinite;
+}
+
+.heartRise2 {
+    animation: heartRise2 2s ease-out infinite 0.5s;
+}
+
+.heartRise3 {
+    animation: heartRise3 2s ease-out infinite 1s;
+}
+
+.trophy {
+    animation: trophyGlow 2s ease-in-out infinite;
+}
+
+.starA {
+    animation: starSpin 3s linear infinite;
+    transform-origin: 38px 10px;
+}
+
+.starB {
+    animation: starSpin 2.5s linear infinite reverse;
+    transform-origin: 10px 12px;
+}

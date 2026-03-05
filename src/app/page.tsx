@@ -4,6 +4,7 @@ import InteractiveCardHero from '@/components/InteractiveCardHero';
 import InteractiveBoardCarousel from '@/components/InteractiveBoardCarousel';
 import ChatReveal from '@/components/ChatReveal';
 import WhenToUseSection from '@/components/WhenToUseSection';
+import { IconChat, IconVoice, IconGame, IconGlobe, IconCommunity, IconTrophy } from '@/components/FeatureIcons';
 
 export default function Home() {
   return (
@@ -84,32 +85,32 @@ export default function Home() {
           <h2 className={styles.specialFeatureTitle}>SPECIAL FEATURE</h2>
           <div className={styles.featureGrid}>
             <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}></div>
+              <div className={styles.featureIcon}><IconChat /></div>
               <h3 className={styles.featureTitle}>관계별 맞춤 질문</h3>
               <p className={styles.featureDesc}>연인, 가족, 친구 등 관계에 따라 최적화된 질문이 제공됩니다.</p>
             </div>
             <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}></div>
+              <div className={styles.featureIcon}><IconVoice /></div>
               <h3 className={styles.featureTitle}>음성 문자 변환</h3>
               <p className={styles.featureDesc}>음성으로 채팅을 보낼 수 있습니다.</p>
             </div>
             <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}></div>
+              <div className={styles.featureIcon}><IconGame /></div>
               <h3 className={styles.featureTitle}>미니게임</h3>
               <p className={styles.featureDesc}>상대방 셀을 눌러서 도전하세요. 미니게임에서 승리하면 상대방 셀을 쟁취할 수 있습니다.</p>
             </div>
             <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}></div>
+              <div className={styles.featureIcon}><IconGlobe /></div>
               <h3 className={styles.featureTitle}>다국어 지원</h3>
               <p className={styles.featureDesc}>지금은 한국어와 영어를 지원하지만, 점차 다국어 지원을 확대할 것입니다.</p>
             </div>
             <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}></div>
+              <div className={styles.featureIcon}><IconCommunity /></div>
               <h3 className={styles.featureTitle}>커뮤니티</h3>
               <p className={styles.featureDesc}>가까운 지역에 있는 사람들과 대화로 새로운 인연을 만드세요.</p>
             </div>
             <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}></div>
+              <div className={styles.featureIcon}><IconTrophy /></div>
               <h3 className={styles.featureTitle}>빙고게임 기록</h3>
               <p className={styles.featureDesc}>사랑하는 사람들과의 의미 있었던 대화를 기록으로 남기세요.</p>
             </div>
