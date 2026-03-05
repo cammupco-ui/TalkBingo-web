@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import styles from './InteractiveBoardCarousel.module.css';
 
@@ -18,78 +18,120 @@ const CAROUSEL_SCREENSHOTS = [
     { src: '/images/carousel/IMG_13.png', label: '초대 화면', title: '게임종료', desc: '빙고라인 한줄 마다, "게임 지속 여부"를 결정 하실 수 있어요', color: '#EC4899' },
 ];
 
+/** 각도 간격 (카드 1개당 몇 도 벌어지는지) */
+const ANGLE_STEP = 14; // degrees per card
+/** 최대 몇 장까지 보여줄지 (양쪽) */
+const MAX_VISIBLE = 3;
+
 export default function InteractiveBoardCarousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
     const [viewportWidth, setViewportWidth] = useState(375);
+    // splashKey: currentIndex 변경마다 새 key → CSS animation 재실행
+    const [splashKey, setSplashKey] = useState(0);
     const totalItems = CAROUSEL_SCREENSHOTS.length;
 
     useEffect(() => {
-        const checkMobile = () => {
+        const check = () => {
             setIsMobile(window.innerWidth <= 768);
             setViewportWidth(window.innerWidth);
         };
-        checkMobile();
-        window.addEventListener('resize', checkMobile);
-        return () => window.removeEventListener('resize', checkMobile);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
     }, []);
 
-    const handleCardClick = (index: number) => {
+    const handleCardClick = useCallback((index: number) => {
         if (index !== currentIndex) {
             setCurrentIndex(index);
+            setSplashKey(k => k + 1);
         } else {
-            setCurrentIndex((prev) => (prev + 1) % totalItems);
+            const next = (currentIndex + 1) % totalItems;
+            setCurrentIndex(next);
+            setSplashKey(k => k + 1);
         }
-    };
+    }, [currentIndex, totalItems]);
 
     const currentScreen = CAROUSEL_SCREENSHOTS[currentIndex];
 
-    // ── 비율 기반 크기 계산 ───────────────────────────────────────────
-    // 데스크탑은 고정값 사용, 모바일은 viewport 비율로 계산
-    const deckWidth = isMobile ? Math.round(Math.min(115, viewportWidth * 0.28)) : 196;
-    const deckHeight = deckWidth * 2;
-    // perspective: 모바일에서 크게 설정해 측면 카드가 더 벌어져 보이게 함
-    const perspective = isMobile ? 2400 : 1800;
-    // radius:
-    //   데스크탑: 400px (11카드, 32.7° 간격에서 겹침 없는 최소 반경 계산값)
-    //   모바일: viewport 비율 기반 + 화면 밖 초과 방지 clamp
-    const maxRadius = isMobile ? Math.round(viewportWidth / 2 - deckWidth / 2 - 20) : 400;
-    const radius = isMobile ? Math.min(Math.round(viewportWidth * 0.40), maxRadius) : 400;
+    // 카드 / 팬 크기
+    const cardW = isMobile ? Math.round(Math.min(110, viewportWidth * 0.26)) : 180;
+    const cardH = cardW * 2;
+    // 팬 컨테이너 높이 = 중앙 카드 높이 + 상단 여백
+    const fanH = cardH + 32;
 
     return (
         <div className={styles.carouselContainer}>
+            {/* 데스크탑 왼쪽 텍스트 */}
             <div className={styles.carouselTextLeft}>
-                <h3 className={styles.carouselTitle} style={{ color: currentScreen.color }}>{currentScreen.title}</h3>
+                <h3 className={styles.carouselTitle} style={{ color: currentScreen.color }}>
+                    {currentScreen.title}
+                </h3>
             </div>
+
+            {/* ── Fan 컨테이너 ── */}
             <div
-                className={styles.deck}
-                style={isMobile ? {
-                    width: `${deckWidth}px`,
-                    height: `${deckHeight}px`,
-                    perspective: `${perspective}px`,
-                } : undefined}
+                className={styles.fanWrapper}
+                style={{ height: `${fanH}px` }}
             >
                 {CAROUSEL_SCREENSHOTS.map((screen, index) => {
                     let diff = index - currentIndex;
-                    if (diff > totalItems / 2) { diff -= totalItems; } else if (diff < -totalItems / 2) { diff += totalItems; }
-                    const isCenter = diff === 0;
-                    const theta = (360 / totalItems) * diff;
+                    if (diff > totalItems / 2) diff -= totalItems;
+                    if (diff < -totalItems / 2) diff += totalItems;
 
-                    const distanceRatio = Math.abs(diff) / (totalItems / 2);
-                    const opacity = Math.max(0, 1 - distanceRatio * 3.0);
-                    let transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
-                    transform += isMobile
-                        ? ` rotateX(-2deg) translateY(0px)`
-                        : ` rotateX(-2deg) translateY(${Math.abs(diff) * 10}px)`;
-                    if (isCenter) { transform += ` scale(1.2)`; }
-                    const zIndex = 100 - Math.abs(diff) * 10;
+                    const isCenter = diff === 0;
+                    const absDiff = Math.abs(diff);
+                    if (absDiff > MAX_VISIBLE) return null;
+
+                    // 불투명도: 중앙 1.0, ±1 0.75, ±2 0.45, ±3 0.2
+                    const opacity = isCenter ? 1 : Math.max(0.1, 1 - absDiff * 0.28);
+                    const zIndex = isCenter ? 50 : 40 - absDiff * 10;
+
+                    // ── 팬 카드: 하단 중심축(transform-origin: 50% 100%)으로 회전
+                    //   카드 한 면이 중심을 향하는 방사형 배치
+                    let transform: string;
+                    if (isCenter) {
+                        // 중앙 카드: 팬 컨테이너 상단 중앙에 위치 + scale
+                        transform = `translateX(-50%) translateY(0px) scale(1.12)`;
+                    } else {
+                        const angle = diff * ANGLE_STEP;
+                        // 먼저 하단 위치(bottom:0)로 배치 후 rotate → 팬 효과
+                        transform = `translateX(-50%) rotate(${angle}deg)`;
+                    }
+
                     return (
-                        <div key={screen.src} className={`${styles.card} ${isCenter ? styles.centerCard : ''}`} style={{ transform, zIndex, opacity }} onClick={() => handleCardClick(index)}>
-                            <Image src={screen.src} alt={screen.label} width={320} height={640} className={styles.cardImage} priority={isCenter || Math.abs(diff) === 1} />
+                        <div
+                            key={screen.src}
+                            // 중앙 카드에 splashKey 붙여 애니메이션 재시작
+                            {...(isCenter ? { 'data-splash-key': splashKey } : {})}
+                            className={`${styles.fanCard} ${isCenter ? styles.fanCenter : ''}`}
+                            style={{
+                                width: `${cardW}px`,
+                                height: `${cardH}px`,
+                                opacity,
+                                zIndex,
+                                transform,
+                                // 팬 회전축: 카드 하단 중앙
+                                transformOrigin: isCenter ? '50% 100%' : '50% 100%',
+                                // 중앙 카드 glow 색상
+                                ...(isCenter ? { '--glow-color': currentScreen.color } as React.CSSProperties : {}),
+                            }}
+                            onClick={() => handleCardClick(index)}
+                        >
+                            <Image
+                                src={screen.src}
+                                alt={screen.label}
+                                width={320}
+                                height={640}
+                                className={styles.cardImage}
+                                priority={isCenter || absDiff === 1}
+                            />
                         </div>
                     );
                 })}
             </div>
+
+            {/* 데스크탑 오른쪽 설명 */}
             <div className={styles.carouselTextRight}>
                 <p className={styles.carouselDesc}>
                     {currentScreen.desc.split(',').map((part, i, arr) => (
@@ -97,14 +139,20 @@ export default function InteractiveBoardCarousel() {
                     ))}
                 </p>
             </div>
+
+            {/* 모바일 제목 + 설명 */}
             <div className={styles.carouselTextMobile}>
-                <h3 className={styles.mobileTitle} style={{ color: currentScreen.color }}>{currentScreen.title}</h3>
+                <h3 className={styles.mobileTitle} style={{ color: currentScreen.color }}>
+                    {currentScreen.title}
+                </h3>
                 <p className={styles.mobileDesc}>
                     {currentScreen.desc.split(',').map((part, i, arr) => (
                         <span key={i}>{part.trim()}{i < arr.length - 1 ? ',' : ''}{i < arr.length - 1 && <br />}</span>
                     ))}
                 </p>
             </div>
+
+            {/* 인터랙션 힌트 */}
             <div className={styles.interactionHint}>
                 <span className={styles.hintClick}>CLICK</span>
                 <svg className={styles.hintArrow} width="40" height="14" viewBox="0 0 40 14" fill="none">

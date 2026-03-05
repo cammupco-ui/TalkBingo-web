@@ -54,6 +54,80 @@
     transform-style: preserve-3d;
 }
 
+/* ===== Fan 레이아웃 ===== */
+
+/* 팬 전체를 감싸는 컨테이너 — 카드들이 하단 중심축에서 방사형으로 펼쳐짐 */
+.fanWrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    /* 하단 정렬 — 모든 카드 하단이 같은 선 */
+    overflow: visible;
+    flex-shrink: 0;
+}
+
+/* 각 카드: 하단 중앙을 기준으로 rotation */
+.fanCard {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    border-radius: 28px;
+    border: 6px solid #222;
+    background: #000;
+    overflow: hidden;
+    cursor: pointer;
+    user-select: none;
+    transition:
+        transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.45s ease,
+        box-shadow 0.45s ease;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    will-change: transform, opacity;
+}
+
+.fanCard:hover {
+    filter: brightness(1.1);
+}
+
+/* ── 중앙 카드 (선택됨) ── */
+@keyframes splash {
+    0% {
+        transform: translateX(-50%) translateY(0) scale(0.65);
+        opacity: 0.3;
+        filter: brightness(2.5) blur(2px);
+    }
+
+    30% {
+        filter: brightness(1.8) blur(0px);
+    }
+
+    60% {
+        transform: translateX(-50%) translateY(0) scale(1.18);
+        opacity: 1;
+        filter: brightness(1.2);
+    }
+
+    80% {
+        transform: translateX(-50%) translateY(0) scale(1.08);
+    }
+
+    100% {
+        transform: translateX(-50%) translateY(0) scale(1.12);
+        opacity: 1;
+        filter: brightness(1);
+    }
+}
+
+.fanCenter {
+    animation: splash 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.7),
+        0 0 40px var(--glow-color, rgba(189, 5, 88, 0.5));
+    border-color: #333;
+    cursor: default;
+}
+
 .card {
     position: absolute;
     top: 0;
