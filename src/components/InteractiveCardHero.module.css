@@ -579,7 +579,7 @@
     z-index: 10;
     text-align: center;
     pointer-events: none;
-    padding: 28px 24px 15vh;
+    padding: 28px 24px 10vh;
     opacity: 0;
     transition: opacity 1.2s ease;
 }
@@ -649,6 +649,8 @@
     box-shadow: 0 4px 20px rgba(189, 5, 88, 0.45);
     transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s;
     white-space: nowrap;
+    cursor: pointer;
+    border: none;
 }
 
 .ctaPrimary:hover {
@@ -692,16 +694,16 @@
     /* 모바일: absolute 유지, min-height로 overflow 방지 */
     .heroSection {
         height: 100svh;
-        min-height: 780px;
+        min-height: 640px;
         overflow: hidden;
     }
 
-    /* 코어 메시지: 모바일에서 카드 아래 위치로 이동 */
+    /* 코어 메시지: 모바일에서 항상 뷰포트 하단 고정 */
     .coreMessage {
         position: absolute;
-        bottom: auto;
-        top: 55%;
-        padding: 20px 16px 24px;
+        bottom: 0;
+        top: auto;
+        padding: 16px 16px 6%;
         z-index: 10;
     }
 

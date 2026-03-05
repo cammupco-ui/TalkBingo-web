@@ -288,9 +288,7 @@ export default function InteractiveCardHero() {
 
                     {/* CTA 버튼 */}
                     <div className={`${styles.ctaButtons} ${showCoreLine2 ? styles.ctaVisible : ''}`}>
-                        <a href="https://talkbingo.app" target="_blank" rel="noopener noreferrer" className={styles.ctaPrimary}>
-                            빙고게임 하러가기
-                        </a>
+                        <BingoGameButton className={styles.ctaPrimary} />
                         <AppDownloadButton />
                     </div>
                 </div>
@@ -305,24 +303,80 @@ export default function InteractiveCardHero() {
     );
 }
 
+/* ─────────────────────────────────────────────────────────
+   "빙고게임 하러가기" — 앱 설치 시 앱으로, 미설치 시 웹으로
+   ───────────────────────────────────────────────────────── */
+function BingoGameButton({ className }: { className: string }) {
+    const handleClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        const APP_SCHEME = 'talkbingo://';
+        const WEB_URL = 'https://talkbingo.app';
+
+        // 커스텀 스킴 시도 → 앱이 있으면 포그라운드 전환, 없으면 visibilitychange 없이 타임아웃
+        const start = Date.now();
+        window.location.href = APP_SCHEME;
+
+        setTimeout(() => {
+            // 페이지가 여전히 visible (앱이 열리지 않음) → 웹으로 이동
+            if (!document.hidden && Date.now() - start < 2000) {
+                window.open(WEB_URL, '_blank', 'noopener,noreferrer');
+            }
+        }, 1200);
+    };
+
+    return (
+        <button onClick={handleClick} className={className}>
+            빙고게임 하러가기
+        </button>
+    );
+}
+
+/* ─────────────────────────────────────────────────────────
+   "앱 다운로드" — 플랫폼별 스토어 자동 연결
+   ───────────────────────────────────────────────────────── */
 function AppDownloadButton() {
-    const [platform, setPlatform] = React.useState<'ios' | 'android' | 'web'>('web');
+    type Platform = 'ios' | 'android' | 'macos' | 'windows' | 'web';
+    const [platform, setPlatform] = React.useState<Platform>('web');
 
     React.useEffect(() => {
         const ua = navigator.userAgent;
-        if (/iPad|iPhone|iPod/.test(ua)) setPlatform('ios');
-        else if (/Android/.test(ua)) setPlatform('android');
+        const platform = navigator.platform ?? '';
+        if (/iPad|iPhone|iPod/.test(ua) && !/Macintosh/.test(ua)) {
+            setPlatform('ios');
+        } else if (/Android/.test(ua)) {
+            setPlatform('android');
+        } else if (/Mac/.test(platform) || /Macintosh/.test(ua)) {
+            // macOS — App Store (Apple Silicon 앱 설치 가능)
+            setPlatform('macos');
+        } else if (/Win/.test(platform) || /Windows/.test(ua)) {
+            setPlatform('windows');
+        }
     }, []);
 
-    const href = platform === 'ios'
-        ? 'https://apps.apple.com/app/talkbingo/id6740272133'
-        : platform === 'android'
-            ? 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo'
-            : 'https://talkbingo.app';
+    const STORE_MAP: Record<Platform, { href: string; label: string }> = {
+        ios: {
+            href: 'https://apps.apple.com/app/talkbingo/id6740272133',
+            label: 'App Store에서 다운로드',
+        },
+        android: {
+            href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo',
+            label: 'Google Play에서 다운로드',
+        },
+        macos: {
+            href: 'https://apps.apple.com/app/talkbingo/id6740272133',
+            label: 'Mac App Store에서 다운로드',
+        },
+        windows: {
+            href: 'https://www.microsoft.com/store/search/talkbingo',
+            label: 'Microsoft Store에서 검색',
+        },
+        web: {
+            href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo',
+            label: '앱 다운로드 받기',
+        },
+    };
 
-    const label = platform === 'ios' ? 'App Store에서 다운로드'
-        : platform === 'android' ? 'Google Play에서 다운로드'
-            : '앱 다운로드 받기';
+    const { href, label } = STORE_MAP[platform];
 
     return (
         <a href={href} target="_blank" rel="noopener noreferrer" className={styles.ctaSecondary}>
@@ -330,3 +384,4 @@ function AppDownloadButton() {
         </a>
     );
 }
+
