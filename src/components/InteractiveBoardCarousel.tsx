@@ -21,10 +21,14 @@ const CAROUSEL_SCREENSHOTS = [
 export default function InteractiveBoardCarousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
+    const [viewportWidth, setViewportWidth] = useState(375);
     const totalItems = CAROUSEL_SCREENSHOTS.length;
 
     useEffect(() => {
-        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth <= 768);
+            setViewportWidth(window.innerWidth);
+        };
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
@@ -39,7 +43,8 @@ export default function InteractiveBoardCarousel() {
     };
 
     const currentScreen = CAROUSEL_SCREENSHOTS[currentIndex];
-    const radius = isMobile ? 200 : 266;
+    // 모바일: 220px 목표, 단 화면 절반 - 80px을 초과하지 않도록 clamp
+    const radius = isMobile ? Math.min(220, viewportWidth / 2 - 80) : 266;
 
     return (
         <div className={styles.carouselContainer}>
