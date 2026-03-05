@@ -18,11 +18,6 @@ const CAROUSEL_SCREENSHOTS = [
     { src: '/images/carousel/IMG_13.png', label: '초대 화면', title: '게임종료', desc: '빙고라인 한줄 마다, "게임 지속 여부"를 결정 하실 수 있어요', color: '#EC4899' },
 ];
 
-/** rotateX 각도 간격 */
-const ANGLE_STEP = 20; // degrees per card slot
-/** 최대 보이는 카드 수 (양쪽) */
-const MAX_VISIBLE = 3;
-
 export default function InteractiveBoardCarousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
@@ -51,78 +46,56 @@ export default function InteractiveBoardCarousel() {
 
     const currentScreen = CAROUSEL_SCREENSHOTS[currentIndex];
 
-    // 카드 크기
-    const cardW = isMobile ? Math.round(Math.min(120, viewportWidth * 0.29)) : 196;
-    const cardH = cardW * 2;
-    // 3D 휠 반경 — 카드가 rotateX 후 translateZ로 나오는 거리
-    const radius = isMobile
-        ? Math.round(Math.min(160, viewportWidth * 0.38))
-        : 320;
-    // perspective — 원근 깊이감
-    const persp = isMobile ? 700 : 1100;
+    // 비율 기반 크기 계산
+    const deckWidth = isMobile ? Math.round(Math.min(115, viewportWidth * 0.28)) : 196;
+    const deckHeight = deckWidth * 2;
+    const perspective = isMobile ? 2400 : 1800;
+    const maxRadius = isMobile ? Math.round(viewportWidth / 2 - deckWidth / 2 - 20) : 400;
+    const radius = isMobile ? Math.min(Math.round(viewportWidth * 0.40), maxRadius) : 400;
 
     return (
         <div className={styles.carouselContainer}>
-
-            {/* 데스크탑 왼쪽 제목 */}
             <div className={styles.carouselTextLeft}>
-                <h3 className={styles.carouselTitle} style={{ color: currentScreen.color }}>
-                    {currentScreen.title}
-                </h3>
+                <h3 className={styles.carouselTitle} style={{ color: currentScreen.color }}>{currentScreen.title}</h3>
             </div>
 
-            {/* ── 3D Wheel 컨테이너 ── */}
+            {/* 기존 수평 3D 원통 캐러셀 */}
             <div
-                className={styles.wheelScene}
-                style={{
-                    width: `${cardW}px`,
-                    height: `${cardH}px`,
-                    perspective: `${persp}px`,
-                }}
+                className={styles.deck}
+                style={isMobile ? {
+                    width: `${deckWidth}px`,
+                    height: `${deckHeight}px`,
+                    perspective: `${perspective}px`,
+                } : { perspective: `${perspective}px` }}
             >
                 {CAROUSEL_SCREENSHOTS.map((screen, index) => {
                     let diff = index - currentIndex;
                     if (diff > totalItems / 2) diff -= totalItems;
-                    if (diff < -totalItems / 2) diff += totalItems;
+                    else if (diff < -totalItems / 2) diff += totalItems;
 
                     const isCenter = diff === 0;
-                    const absDiff = Math.abs(diff);
-                    if (absDiff > MAX_VISIBLE) return null;
+                    const theta = (360 / totalItems) * diff;
+                    const distanceRatio = Math.abs(diff) / (totalItems / 2);
+                    const opacity = Math.max(0, 1 - distanceRatio * 3.0);
 
-                    // 중앙에서 멀어질수록 흐려짐
-                    const opacity = isCenter ? 1 : Math.max(0.08, 1 - absDiff * 0.32);
-                    const zIndex = isCenter ? 50 : 40 - absDiff * 10;
+                    let transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
+                    transform += isMobile
+                        ? ` rotateX(-2deg) translateY(0px)`
+                        : ` rotateX(-2deg) translateY(${Math.abs(diff) * 10}px)`;
+                    if (isCenter) transform += ` scale(1.2)`;
 
-                    // 3D Ferris Wheel 변환:
-                    //   rotateX(θ)       → 수직 휠로 배치 (위아래 카드가 뒤로 기울어짐)
-                    //   translateZ(r)    → 카드가 원통 표면에 위치
-                    const theta = diff * ANGLE_STEP;
-                    const transform = `rotateX(${theta}deg) translateZ(${radius}px)`;
+                    const zIndex = 100 - Math.abs(diff) * 10;
 
                     return (
                         <div
+                            // center card에 splashKey를 포함 → 매번 DOM 재생성 → animation 재실행
                             key={isCenter ? `center-${splashKey}` : screen.src}
-                            className={`${styles.wheelCard} ${isCenter ? styles.wheelCenter : ''}`}
-                            // splashKey를 CSS variable로 주입해 animation 재시작
-                            {...(isCenter
-                                ? {
-                                    style: {
-                                        '--glow-color': currentScreen.color,
-                                        animationName: styles.splashGlow,
-                                        animationDuration: '0.55s',
-                                    } as React.CSSProperties
-                                }
-                                : {}
-                            )}
+                            className={`${styles.card} ${isCenter ? styles.centerCard : ''}`}
                             style={{
-                                width: `${cardW}px`,
-                                height: `${cardH}px`,
-                                opacity,
-                                zIndex,
                                 transform,
-                                ...(isCenter ? {
-                                    '--glow-color': currentScreen.color,
-                                } as React.CSSProperties : {}),
+                                zIndex,
+                                opacity,
+                                ...(isCenter ? { '--glow-color': currentScreen.color } as React.CSSProperties : {}),
                             }}
                             onClick={() => handleCardClick(index)}
                         >
@@ -132,14 +105,13 @@ export default function InteractiveBoardCarousel() {
                                 width={320}
                                 height={640}
                                 className={styles.cardImage}
-                                priority={isCenter || absDiff === 1}
+                                priority={isCenter || Math.abs(diff) === 1}
                             />
                         </div>
                     );
                 })}
             </div>
 
-            {/* 데스크탑 오른쪽 설명 */}
             <div className={styles.carouselTextRight}>
                 <p className={styles.carouselDesc}>
                     {currentScreen.desc.split(',').map((part, i, arr) => (
@@ -147,20 +119,14 @@ export default function InteractiveBoardCarousel() {
                     ))}
                 </p>
             </div>
-
-            {/* 모바일 제목 + 설명 */}
             <div className={styles.carouselTextMobile}>
-                <h3 className={styles.mobileTitle} style={{ color: currentScreen.color }}>
-                    {currentScreen.title}
-                </h3>
+                <h3 className={styles.mobileTitle} style={{ color: currentScreen.color }}>{currentScreen.title}</h3>
                 <p className={styles.mobileDesc}>
                     {currentScreen.desc.split(',').map((part, i, arr) => (
                         <span key={i}>{part.trim()}{i < arr.length - 1 ? ',' : ''}{i < arr.length - 1 && <br />}</span>
                     ))}
                 </p>
             </div>
-
-            {/* 인터랙션 힌트 */}
             <div className={styles.interactionHint}>
                 <span className={styles.hintClick}>CLICK</span>
                 <svg className={styles.hintArrow} width="40" height="14" viewBox="0 0 40 14" fill="none">
