@@ -120,14 +120,12 @@ export default function Home() {
 
       <section className={styles.download}>
         <div className="container">
-          <h2 className={styles.downloadTitle}>지금, 톡빙고로 대화를 시작하세요.</h2>
+          <h2 className={styles.downloadTitle}>지금, <span style={{ fontFamily: "'Nura', sans-serif", fontWeight: 900, letterSpacing: '0.04em' }}>TALKBINGO</span>로 대화를 시작하세요.</h2>
           <div className={styles.downloadButtons}>
-            <a href="https://play.google.com/store/apps/details?id=com.cammupco.talkbingo" target="_blank" rel="noopener noreferrer" className={styles.storeBadge}>
-              <span className={styles.storeBadgeIcon}></span>
+            <a href="https://play.google.com/store/apps/details?id=com.cammupco.talkbingo" target="_blank" rel="noopener noreferrer" className={`${styles.storeBadge} ${styles.storeBadgePrimary}`}>
               <div><div className={styles.storeBadgeLabel}>GET IT ON</div><div className={styles.storeBadgeName}>Google Play</div></div>
             </a>
-            <a href="https://talkbingo.app" target="_blank" rel="noopener noreferrer" className={styles.storeBadge}>
-              <span className={styles.storeBadgeIcon}></span>
+            <a href="https://talkbingo.app" target="_blank" rel="noopener noreferrer" className={`${styles.storeBadge} ${styles.storeBadgeSecondary}`}>
               <div><div className={styles.storeBadgeLabel}>PLAY ON</div><div className={styles.storeBadgeName}>Web Browser</div></div>
             </a>
           </div>
