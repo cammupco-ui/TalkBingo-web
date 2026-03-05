@@ -422,11 +422,15 @@
 
     .bingoCarouselWrapper {
         height: auto;
-        min-height: 380px;
+        min-height: 420px;
+        overflow-x: hidden;
+        overflow-y: visible;
+        width: 100%;
     }
 
     .bingoTransition {
-        padding: 72px 0 80px;
+        padding: 40px 0 60px;
+        overflow-x: hidden;
     }
 
     .bingoContainer {

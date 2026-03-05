@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TalkBingo — 랜딩 페이지 개선 와이어프레임</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', cursive, sans-serif;
+      background: #f0f0f0;
+      color: #222;
+    }
+
+    /* ── 범례 ── */
+    .legend {
+      position: fixed;
+      top: 16px; right: 16px;
+      background: #fff;
+      border: 2px solid #333;
+      border-radius: 6px;
+      padding: 12px 16px;
+      z-index: 9999;
+      font-size: 12px;
+      line-height: 1.9;
+      box-shadow: 3px 3px 0 #999;
+    }
+    .legend-title { font-weight: bold; font-size: 13px; margin-bottom: 6px; }
+    .badge-reuse { background: #4CAF50; color: #fff; padding: 1px 6px; border-radius: 3px; font-weight: bold; font-size: 10px; }
+    .badge-new   { background: #FF9800; color: #fff; padding: 1px 6px; border-radius: 3px; font-weight: bold; font-size: 10px; }
+    .badge-fix   { background: #e53935; color: #fff; padding: 1px 6px; border-radius: 3px; font-weight: bold; font-size: 10px; }
+
+    /* ── 공통 ── */
+    .page { width: 960px; margin: 30px auto; background: #fff; border: 2px solid #555; }
+    .section { border-bottom: 2px dashed #aaa; position: relative; }
+    .section-label {
+      position: absolute; top: 8px; left: 8px;
+      background: #555; color: #fff;
+      font-size: 10px; font-weight: bold;
+      padding: 2px 8px; border-radius: 3px; letter-spacing: 1px;
+      z-index: 10;
+    }
+    .annotation {
+      display: inline-block;
+      background: #fff9c4;
+      border: 1px dashed #f9a825;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #555;
+      padding: 3px 8px;
+      margin-top: 4px;
+    }
+    .fix-note {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #ffebee; border: 1px solid #e53935;
+      border-radius: 4px; font-size: 11px; color: #b71c1c;
+      padding: 3px 8px; margin-top: 4px;
+    }
+    .fix-note::before { content: "🔧"; font-style: normal; }
+
+    /* ── 컴포넌트 뱃지 ── */
+    .comp-wrap { position: relative; display: inline-block; }
+    .comp-wrap-block { position: relative; display: block; }
+    .badge {
+      position: absolute; top: -8px; right: -8px;
+      padding: 2px 7px; border-radius: 3px;
+      font-size: 10px; font-weight: bold;
+      color: #fff; z-index: 20;
+      white-space: nowrap;
+    }
+    .badge.reuse { background: #4CAF50; }
+    .badge.new-c { background: #FF9800; }
+    .badge.fix   { background: #e53935; }
+
+    /* ─────────────────────────────────
+       1. NAV
+    ───────────────────────────────── */
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px; height: 60px;
+      background: #f5f5f5; border-bottom: 2px solid #ccc;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-weight: bold; font-size: 16px; color: #333;
+    }
+    .nav-logo-icon {
+      width: 26px; height: 26px;
+      background: #999; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; color: #fff;
+    }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .nav-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #ddd; border: 1.5px solid #999;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px;
+    }
+
+    /* ─────────────────────────────────
+       2. HERO — Split Layout
+    ───────────────────────────────── */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 560px;
+      background: repeating-linear-gradient(
+        135deg, #f8f8f8 0px, #f8f8f8 10px, #f0f0f0 10px, #f0f0f0 20px
+      );
+      position: relative;
+    }
+    .hero-left {
+      padding: 80px 40px 60px;
+      display: flex; flex-direction: column;
+      justify-content: center; gap: 20px;
+    }
+    .hero-logo-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 4px;
+    }
+    .hero-logo-box {
+      width: 40px; height: 40px; background: #bbb;
+      border-radius: 8px; border: 2px solid #999;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .hero-logo-text {
+      font-size: 22px; font-weight: bold; color: #333; letter-spacing: 2px;
+    }
+    .hero-headline {
+      font-size: 28px; font-weight: bold; color: #222; line-height: 1.3;
+    }
+    .hero-subline {
+      font-size: 14px; color: #666; line-height: 1.6;
+    }
+    .hero-tags {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .hero-tag {
+      padding: 4px 12px; border: 1.5px solid #999;
+      border-radius: 99px; font-size: 12px; color: #555;
+      background: #fff;
+    }
+    .hero-cta-group {
+      display: flex; flex-direction: column; gap: 10px; margin-top: 8px;
+    }
+    .btn-primary-wf {
+      padding: 14px 28px; background: #444; color: #fff;
+      border-radius: 8px; font-size: 15px; font-weight: bold;
+      border: 2px solid #222; text-align: center;
+      display: inline-block; width: fit-content;
+    }
+    .btn-secondary-wf {
+      padding: 11px 24px; background: #fff; color: #444;
+      border-radius: 8px; font-size: 13px; font-weight: bold;
+      border: 2px solid #999; text-align: center;
+      display: inline-block; width: fit-content;
+    }
+
+    /* 카드 원형 배치 영역 */
+    .hero-right {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      padding: 40px;
+    }
+    .card-orbit {
+      position: relative;
+      width: 300px; height: 300px;
+    }
+    .orbit-center {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 60px; height: 60px; border-radius: 50%;
+      background: #ddd; border: 2px dashed #999;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: #666; text-align: center; line-height: 1.2;
+    }
+    .orbit-ring {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 260px; height: 260px; border-radius: 50%;
+      border: 1.5px dashed #ccc;
+    }
+    .mini-card {
+      position: absolute;
+      width: 52px; height: 76px;
+      border-radius: 5px;
+      border: 1.5px solid #aaa;
+      background: #e8e8e8;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-size: 8px; color: #555; text-align: center;
+      padding: 4px;
+    }
+    .mini-card.balance { background: #d0d0d0; }
+    .mini-card.truth   { background: #e0e0e0; }
+    /* 8 positions on orbit */
+    .mc-0 { top: calc(50% - 130px - 38px); left: calc(50% - 26px); transform: rotate(-2deg); }
+    .mc-1 { top: calc(50% - 92px); left: calc(50% + 80px); transform: rotate(15deg); }
+    .mc-2 { top: calc(50% - 38px); left: calc(50% + 105px); transform: rotate(30deg); }
+    .mc-3 { top: calc(50% + 55px); left: calc(50% + 70px); transform: rotate(-10deg); }
+    .mc-4 { top: calc(50% + 90px); left: calc(50% - 26px); transform: rotate(5deg); }
+    .mc-5 { top: calc(50% + 55px); left: calc(50% - 100px); transform: rotate(-20deg); }
+    .mc-6 { top: calc(50% - 38px); left: calc(50% - 130px); transform: rotate(10deg); }
+    .mc-7 { top: calc(50% - 92px); left: calc(50% - 106px); transform: rotate(-15deg); }
+
+    /* 타이밍 개선 주석 */
+    .timing-note {
+      position: absolute; bottom: 16px; left: 50%;
+      transform: translateX(-50%);
+      background: #fff; border: 1.5px dashed #999;
+      border-radius: 4px; padding: 6px 14px;
+      font-size: 11px; color: #555; white-space: nowrap;
+    }
+
+    /* ─────────────────────────────────
+       3. PREVIEW BINGO
+    ───────────────────────────────── */
+    .preview-section {
+      padding: 60px 40px 40px;
+      background: #f0f0f0;
+      text-align: center;
+    }
+    .preview-eyebrow {
+      font-size: 11px; letter-spacing: 3px; color: #999;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .preview-title-box {
+      display: inline-block; position: relative;
+      border: 3px solid #bbb; border-radius: 8px;
+      padding: 8px 40px; margin-bottom: 12px;
+    }
+    .preview-title {
+      font-size: 72px; font-weight: bold; color: #ccc;
+      letter-spacing: -2px; line-height: 1.1;
+    }
+    .preview-sub { font-size: 13px; color: #888; margin-bottom: 32px; }
+
+    /* 캐러셀 */
+    .carousel-wrap {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; margin: 0 auto;
+    }
+    .carousel-side-text {
+      width: 140px; text-align: right;
+    }
+    .carousel-title { font-size: 16px; font-weight: bold; color: #555; }
+    .carousel-desc  { font-size: 12px; color: #888; margin-top: 6px; line-height: 1.5; }
+    .carousel-phones {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .phone-side {
+      width: 90px; height: 180px; border: 2px solid #bbb;
+      border-radius: 14px; background: #e8e8e8;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; color: #aaa; opacity: 0.7;
+    }
+    .phone-main {
+      width: 130px; height: 260px; border: 2.5px solid #555;
+      border-radius: 18px; background: #ddd;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-size: 11px; color: #666; gap: 6px;
+    }
+    .phone-screen-mock {
+      width: 110px; height: 220px; border-radius: 12px;
+      background: #ccc; display: flex; align-items: center;
+      justify-content: center; font-size: 10px; color: #888;
+    }
+    .click-hint {
+      font-size: 11px; color: #888; margin-top: 16px; letter-spacing: 2px;
+    }
+    .carousel-right-text { width: 140px; text-align: left; }
+
+    /* ─────────────────────────────────
+       4. CHAT REVEAL
+    ───────────────────────────────── */
+    .chat-section {
+      padding: 80px 40px;
+      background: #f5f5f5;
+      display: flex; align-items: center;
+      justify-content: center; gap: 40px;
+    }
+    .chat-char-box {
+      width: 160px; height: 220px;
+      border: 2px solid #bbb; border-radius: 14px;
+      background: #e0e0e0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: #888;
+    }
+    .chat-phone-wrap {
+      display: flex; align-items: center; justify-content: center;
+    }
+    .chat-phone {
+      width: 150px; height: 300px;
+      border: 2.5px solid #555; border-radius: 20px;
+      background: #ddd; display: flex; align-items: center;
+      justify-content: center; font-size: 11px; color: #777;
+    }
+    .chat-text {
+      max-width: 220px; text-align: center;
+    }
+    .chat-headline { font-size: 20px; font-weight: bold; color: #333; line-height: 1.4; }
+    .chat-desc { font-size: 13px; color: #777; margin-top: 10px; line-height: 1.6; }
+
+    /* ─────────────────────────────────
+       5. FEATURES — 다크 배경으로 변경
+    ───────────────────────────────── */
+    .features-section {
+      padding: 80px 40px;
+      background: #2a2a2a;
+    }
+    .features-header { text-align: center; margin-bottom: 48px; }
+    .features-eyebrow { font-size: 11px; color: #888; letter-spacing: 3px; text-transform: uppercase; }
+    .features-title { font-size: 32px; font-weight: bold; color: #ddd; margin: 10px 0 12px; }
+    .features-sub { font-size: 14px; color: #888; max-width: 480px; margin: 0 auto; }
+
+    /* 개선: 2열 그리드 */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: #3a3a3a; border: 1.5px solid #555;
+      border-radius: 12px; padding: 28px 24px;
+      display: flex; flex-direction: column;
+      align-items: flex-start; gap: 10px;
+    }
+    .feature-icon-box {
+      width: 48px; height: 48px;
+      background: #555; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .feature-name { font-size: 16px; font-weight: bold; color: #ddd; }
+    .feature-desc-text { font-size: 13px; color: #999; line-height: 1.6; }
+
+    /* ─────────────────────────────────
+       6. DOWNLOAD CTA
+    ───────────────────────────────── */
+    .download-section {
+      padding: 80px 40px;
+      background: #1a1a2e;
+      text-align: center;
+    }
+    .dl-title { font-size: 28px; font-weight: bold; color: #ddd; margin-bottom: 12px; }
+    .dl-sub { font-size: 14px; color: #888; margin-bottom: 36px; }
+    .dl-buttons { display: flex; gap: 16px; justify-content: center; }
+    .dl-btn {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 28px; border: 2px solid #777;
+      border-radius: 12px; background: rgba(255,255,255,0.07);
+    }
+    .dl-btn-icon { font-size: 24px; }
+    .dl-btn-text { text-align: left; }
+    .dl-btn-label { font-size: 10px; color: #888; text-transform: uppercase; }
+    .dl-btn-name  { font-size: 16px; font-weight: bold; color: #ccc; }
+
+    /* ─────────────────────────────────
+       7. FOOTER
+    ───────────────────────────────── */
+    .footer {
+      padding: 40px;
+      background: #111;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+    }
+    .footer-brand { display: flex; align-items: center; gap: 8px; }
+    .footer-logo-icon {
+      width: 24px; height: 24px; background: #555;
+      border-radius: 4px; flex-shrink: 0;
+    }
+    .footer-logo-name { font-size: 15px; font-weight: bold; color: #bbb; }
+    .footer-desc { font-size: 12px; color: #666; margin-top: 10px; line-height: 1.7; }
+    .footer-col-title { font-size: 12px; font-weight: bold; color: #888; margin-bottom: 12px; letter-spacing: 1px; }
+    .footer-link { font-size: 13px; color: #666; margin-bottom: 8px; display: block; }
+    .footer-copy {
+      border-top: 1px solid #333; padding: 16px 40px;
+      background: #111; display: flex; justify-content: space-between;
+      font-size: 11px; color: #555;
+    }
+
+    /* ─────────────────────────────────
+       반응형 힌트 박스
+    ───────────────────────────────── */
+    .responsive-hint {
+      background: #fff3e0; border: 1.5px dashed #FF9800;
+      border-radius: 6px; padding: 10px 16px;
+      font-size: 12px; color: #e65100;
+      margin: 16px 0; text-align: left;
+    }
+    .responsive-hint strong { color: #bf360c; }
+
+    /* ─────────────────────────────────
+       개선 요약 패널
+    ───────────────────────────────── */
+    .improvement-panel {
+      background: #f5f5f5; border-top: 3px solid #333;
+      padding: 32px 40px;
+    }
+    .improvement-title { font-size: 18px; font-weight: bold; color: #333; margin-bottom: 20px; }
+    .improvement-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .improvement-item {
+      background: #fff; border: 1.5px solid #ddd; border-radius: 8px;
+      padding: 16px; position: relative;
+    }
+    .improvement-item .badge { top: -10px; right: -10px; }
+    .improvement-num {
+      font-size: 22px; font-weight: bold; color: #ccc; margin-bottom: 6px;
+    }
+    .improvement-desc { font-size: 12px; color: #555; line-height: 1.6; }
+    .improvement-tag {
+      display: inline-block; font-size: 10px; font-weight: bold;
+      padding: 1px 6px; border-radius: 3px; margin-bottom: 6px;
+    }
+    .tag-critical { background: #ffcdd2; color: #b71c1c; }
+    .tag-high     { background: #ffe0b2; color: #e65100; }
+    .tag-medium   { background: #fff9c4; color: #827717; }
+  </style>
+</head>
+<body>
+
+<!-- 범례 -->
+<div class="legend">
+  <div class="legend-title">🗂 컴포넌트 범례</div>
+  <span class="badge-reuse">[REUSE]</span> 기존 컴포넌트 재사용<br>
+  <span class="badge-new">[NEW]</span> 새로 만들 컴포넌트<br>
+  <span class="badge-fix">[FIX]</span> 버그/이슈 수정 필요
+</div>
+
+<div class="page">
+
+  <!-- ════════════════════════════════
+       1. NAV
+  ════════════════════════════════ -->
+  <div class="section" style="background: #f5f5f5;">
+    <div class="section-label">NAV</div>
+
+    <!-- REUSABLE: Nav from src/components/Nav.tsx -->
+    <div style="position: relative;">
+      <span class="badge reuse" style="top: 8px; right: 8px; position: absolute;">[REUSE] Nav.tsx</span>
+      <div class="nav">
+        <div class="nav-logo">
+          <!-- FIX: 로고 경로 수정 /logo_vector.svg → /assets/hero/LOGO_Vector_edited.svg -->
+          <span style="position: relative; display: inline-block;">
+            <span class="badge fix" style="top: -10px; right: -10px;">[FIX] 경로</span>
+            <div class="nav-logo-icon">🎯</div>
+          </span>
+          <span style="font-weight: bold; letter-spacing: 2px;">TALKBINGO</span>
+        </div>
+        <div class="nav-right">
+          <div class="nav-icon">📷</div>
+          <div class="nav-icon">▶</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding: 4px 32px 10px;">
+      <div class="fix-note">로고 이미지 경로 수정: <code style="background:#eee; padding:0 4px; border-radius:2px;">/logo_vector.svg</code> → <code style="background:#eee; padding:0 4px; border-radius:2px;">/assets/hero/LOGO_Vector_edited.svg</code></div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       2. HERO — 개선된 레이아웃
+  ════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">HERO — 개선</div>
+
+    <!-- REUSABLE: InteractiveCardHero (구조 변경) -->
+    <div style="position: relative;">
+      <span class="badge reuse" style="position: absolute; top: 8px; right: 8px;">[REUSE] InteractiveCardHero.tsx</span>
+
+      <div class="hero">
+        <!-- 왼쪽: 즉시 노출 텍스트 + CTA -->
+        <div class="hero-left">
+          <div class="hero-logo-row">
+            <div class="hero-logo-box">🎯</div>
+            <div class="hero-logo-text">TALKBINGO</div>
+          </div>
+
+          <div>
+            <div class="hero-headline">대화하며 알아가는<br>밸런스 빙고게임</div>
+            <div style="margin-top: 8px;">
+              <div class="annotation">⚡ 로고 + 헤드라인 → 페이지 진입 즉시 노출 (애니메이션 ~2s로 단축)</div>
+            </div>
+          </div>
+
+          <div class="hero-tags">
+            <span class="hero-tag">Balance QUIZ</span>
+            <span class="hero-tag">Truth QUIZ</span>
+            <span class="hero-tag">Mini GAME</span>
+          </div>
+          <div style="margin-top: 4px;">
+            <div class="fix-note">SubTitlesRow 텍스트 잘림 수정: white-space: nowrap 제거 → flex-wrap: wrap</div>
+          </div>
+
+          <div class="hero-cta-group">
+            <div class="comp-wrap">
+              <span class="badge reuse">[REUSE] ctaPrimary</span>
+              <div class="btn-primary-wf">🎮 빙고게임 하러가기</div>
+            </div>
+            <div class="comp-wrap">
+              <span class="badge reuse">[REUSE] AppDownloadButton</span>
+              <div class="btn-secondary-wf">📱 앱 다운로드 받기</div>
+            </div>
+          </div>
+          <div class="annotation">CTA 즉시 클릭 가능 — pointer-events 버그 수정 필요</div>
+        </div>
+
+        <!-- 오른쪽: 카드 인터랙션 영역 유지 -->
+        <div class="hero-right">
+          <div style="position: relative;">
+            <span class="badge reuse" style="position: absolute; top: -10px; right: -10px;">[REUSE] 카드 인터랙션</span>
+            <div class="card-orbit">
+              <div class="orbit-ring"></div>
+              <div class="orbit-center">카드<br>인터랙션</div>
+              <div class="mini-card balance mc-0">BALANCE<br>찍먹 vs 부먹</div>
+              <div class="mini-card truth mc-1">TRUTH<br>보고<br>싶은 것</div>
+              <div class="mini-card balance mc-2">BALANCE<br>산 vs 바다</div>
+              <div class="mini-card truth mc-3">TRUTH<br>즐거운<br>때</div>
+              <div class="mini-card balance mc-4">BALANCE<br>분석 vs 직관</div>
+              <div class="mini-card truth mc-5">TRUTH<br>생일<br>선물</div>
+              <div class="mini-card balance mc-6">BALANCE<br>만들기 vs 스포츠</div>
+              <div class="mini-card truth mc-7">TRUTH<br>연말<br>계획</div>
+            </div>
+          </div>
+          <div class="timing-note">🕐 카드 등장 애니메이션: stagger 0~1.5s (기존 3s에서 단축)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 모바일 개선 힌트 -->
+    <div class="responsive-hint" style="margin: 0; border-radius: 0;">
+      <strong>📱 모바일 (768px 이하):</strong> 스택 레이아웃 유지 — 헤드라인/CTA 위 → 카드 아래 배치. 카드 오버레이 padding-top: 100% → 중앙 정렬로 수정 필요 🔴 Critical
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       3. PREVIEW BINGO
+  ════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">PREVIEW BINGO</div>
+
+    <div class="preview-section">
+      <div class="preview-eyebrow">PREVIEW</div>
+
+      <!-- FIX: line-height 수정 -->
+      <div style="position: relative; display: inline-block;">
+        <span class="badge fix" style="position: absolute; top: -10px; right: -10px;">[FIX] line-height</span>
+        <div class="preview-title-box">
+          <div class="preview-title">BINGO</div>
+        </div>
+      </div>
+      <div class="fix-note" style="margin: 8px auto; width: fit-content;">line-height: 1 → 1.15 + padding-top: 0.1em 추가로 텍스트 클리핑 해결</div>
+
+      <div class="preview-sub" style="margin-top: 12px;">앱 화면을 클릭해서 살펴보세요</div>
+
+      <!-- REUSABLE: InteractiveBoardCarousel -->
+      <div style="position: relative; margin-top: 32px;">
+        <span class="badge reuse" style="position: absolute; top: -10px; right: calc(50% - 260px);">[REUSE] InteractiveBoardCarousel.tsx</span>
+        <div class="carousel-wrap">
+          <div class="carousel-side-text">
+            <div class="carousel-title" style="color: #888;">메인홈</div>
+            <div class="carousel-desc">"새 게임"을 누르고,<br>대화하고 싶은<br>사람을 부르세요</div>
+          </div>
+          <div class="carousel-phones">
+            <div class="phone-side">[사이드]</div>
+            <div class="phone-main">
+              <div class="phone-screen-mock">[앱 스크린샷]</div>
+            </div>
+            <div class="phone-side">[사이드]</div>
+          </div>
+          <div class="carousel-right-text">
+            <div class="carousel-desc">클릭하면<br>다음 화면으로<br>이동합니다</div>
+          </div>
+        </div>
+        <div class="click-hint">↑ CLICK — 게임화면 미리보기</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       4. CHAT REVEAL
+  ════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">CHAT REVEAL</div>
+
+    <!-- REUSABLE: ChatReveal -->
+    <div style="position: relative;">
+      <span class="badge reuse" style="position: absolute; top: 8px; right: 8px;">[REUSE] ChatReveal.tsx</span>
+      <div class="chat-section" style="background: #ece8f4;">
+        <div class="chat-char-box">[캐릭터 이미지]</div>
+        <div>
+          <div class="chat-phone-wrap">
+            <div class="chat-phone">[채팅 화면<br>스크롤 reveal]</div>
+          </div>
+          <div class="fix-note" style="margin-top: 8px;">이미지 경로 확인 필요: /images/carousel/CHT_2.png</div>
+        </div>
+        <div class="chat-text">
+          <div class="chat-headline">게임은 핑계,<br>진짜 대화는<br>빙고 안에서 시작!</div>
+          <div class="chat-desc">진솔한 답변을 나누고, 게임이 끝난 후에는 더 깊어지는 둘만의 채팅을 이어나가세요.</div>
+        </div>
+        <div class="chat-char-box" style="transform: scaleX(-1);">[캐릭터 이미지]</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       5. FEATURES — 다크 배경으로 개선
+  ════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">FEATURES — 개선 (다크 배경)</div>
+
+    <div class="features-section">
+      <div class="features-header">
+        <div class="features-eyebrow">✦ 주요 기능</div>
+        <div class="features-title">왜 TalkBingo일까요?</div>
+        <div class="features-sub">단순한 빙고가 아닙니다. 대화를 이끌어내는 스마트한 질문들로 관계를 더 깊게 만들어드립니다.</div>
+        <div class="annotation" style="margin-top: 12px; color: #888;">
+          🎨 개선: 흰 배경 → 다크 배경 (#0C0219 기반)으로 변경하여 브랜드 일관성 확보 (UI_Design.md 기준)
+        </div>
+      </div>
+
+      <!-- REUSABLE: featureCard × 6 (다크 스타일 적용) -->
+      <div style="position: relative;">
+        <span class="badge reuse" style="position: absolute; top: -10px; right: -10px;">[REUSE] featureCard × 6</span>
+        <div class="annotation" style="margin-bottom: 12px; color: #888;">
+          📱 개선: 모바일에서 1열 → <strong>2열 그리드</strong>로 변경 (480px 이하에서만 1열)
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon-box">🗣</div>
+            <div class="feature-name">대화 주제 빙고</div>
+            <div class="feature-desc-text">밸런스 게임, 진실 게임 등 다양한 대화 주제로 자연스럽게 대화를 시작하세요.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">💞</div>
+            <div class="feature-name">관계별 맞춤 질문</div>
+            <div class="feature-desc-text">연인, 가족, 친구 등 관계에 따라 최적화된 질문이 제공됩니다.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">🎯</div>
+            <div class="feature-name">실시간 대전</div>
+            <div class="feature-desc-text">초대 코드로 상대방을 초대하고 실시간으로 빙고 대결을 즐기세요.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">🎤</div>
+            <div class="feature-name">음성 메시지</div>
+            <div class="feature-desc-text">텍스트 대신 음성으로 답변하세요. 더 생생한 대화가 가능합니다.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">🏆</div>
+            <div class="feature-name">챌린지 &amp; 스틸</div>
+            <div class="feature-desc-text">상대방의 셀을 빼는 스틸! 긴장감 넘치는 전략적 게임 플레이.</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-box">🌏</div>
+            <div class="feature-name">다국어 지원</div>
+            <div class="feature-desc-text">한국어와 영어를 지원합니다. 글로벌 친구들과도 함께 즐기세요.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       6. DOWNLOAD CTA
+  ════════════════════════════════ -->
+  <div class="section">
+    <div class="section-label">DOWNLOAD CTA</div>
+
+    <!-- REUSABLE: download section -->
+    <div style="position: relative;">
+      <span class="badge reuse" style="position: absolute; top: 8px; right: 8px;">[REUSE] download section</span>
+      <div class="download-section">
+        <div class="dl-title">지금 바로 시작하세요</div>
+        <div class="dl-sub">TalkBingo를 다운로드하고 소중한 사람과 특별한 대화를 시작하세요.</div>
+        <div class="dl-buttons">
+          <div class="dl-btn">
+            <div class="dl-btn-icon">▶</div>
+            <div class="dl-btn-text">
+              <div class="dl-btn-label">GET IT ON</div>
+              <div class="dl-btn-name">Google Play</div>
+            </div>
+          </div>
+          <div class="dl-btn">
+            <div class="dl-btn-icon">🌐</div>
+            <div class="dl-btn-text">
+              <div class="dl-btn-label">PLAY ON</div>
+              <div class="dl-btn-name">Web Browser</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       7. FOOTER
+  ════════════════════════════════ -->
+  <div class="section" style="border-bottom: none;">
+    <div class="section-label">FOOTER</div>
+
+    <!-- REUSABLE: Footer -->
+    <div style="position: relative;">
+      <span class="badge reuse" style="position: absolute; top: 8px; right: 8px;">[REUSE] Footer.tsx</span>
+      <div class="footer">
+        <div>
+          <div class="footer-brand">
+            <div class="footer-logo-icon"></div>
+            <div class="footer-logo-name">TalkBingo</div>
+          </div>
+          <div class="footer-desc">대화로 빙고를 완성하세요! 연인, 가족, 친구와 함께하는 새로운 커뮤니케이션 게임.</div>
+        </div>
+        <div>
+          <div class="footer-col-title">서비스</div>
+          <span class="footer-link">소개</span>
+          <span class="footer-link">웹 플레이</span>
+        </div>
+        <div>
+          <div class="footer-col-title">지원</div>
+          <span class="footer-link">개인정보처리방침</span>
+          <span class="footer-link">문의하기</span>
+          <span class="footer-link">Google Play</span>
+        </div>
+      </div>
+      <div class="footer-copy">
+        <span>© 2026 Cammupco. All rights reserved.</span>
+        <span>Made with ♥ for better conversations</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       개선 요약 패널
+  ════════════════════════════════ -->
+  <div class="improvement-panel">
+    <div class="improvement-title">🔧 개선 요약 (UI_Design.md 기반)</div>
+    <div class="improvement-grid">
+      <div class="improvement-item">
+        <span class="badge fix" style="top: -10px; right: -10px;">[FIX] Critical</span>
+        <div class="improvement-num">#1</div>
+        <div class="improvement-tag tag-critical">🔴 Critical</div>
+        <div class="improvement-desc"><strong>로고 경로 수정</strong><br><code>/logo_vector.svg</code> → <code>/assets/hero/LOGO_Vector_edited.svg</code></div>
+      </div>
+      <div class="improvement-item">
+        <span class="badge fix" style="top: -10px; right: -10px;">[FIX] Critical</span>
+        <div class="improvement-num">#2</div>
+        <div class="improvement-tag tag-critical">🔴 Critical</div>
+        <div class="improvement-desc"><strong>CTA pointer-events 수정</strong><br><code>.coreMessage</code> pointer-events: none 제거 → <code>.ctaButtons</code>에서만 제어</div>
+      </div>
+      <div class="improvement-item">
+        <span class="badge fix" style="top: -10px; right: -10px;">[FIX] Critical</span>
+        <div class="improvement-num">#3</div>
+        <div class="improvement-tag tag-critical">🔴 Critical</div>
+        <div class="improvement-desc"><strong>모바일 카드 오버레이 위치</strong><br>padding-top: 100% 제거 → align/justify center로 중앙 정렬</div>
+      </div>
+      <div class="improvement-item">
+        <div class="improvement-num">#4</div>
+        <div class="improvement-tag tag-high">🟠 High</div>
+        <div class="improvement-desc"><strong>인트로 애니메이션 단축</strong><br>9.2s → 2~3s로. 헤드라인+CTA 즉시 노출, 카드 stagger 단축</div>
+      </div>
+      <div class="improvement-item">
+        <div class="improvement-num">#5</div>
+        <div class="improvement-tag tag-high">🟠 High</div>
+        <div class="improvement-desc"><strong>SubTitlesRow 텍스트 잘림</strong><br>white-space: nowrap 제거 → flex-wrap: wrap + justify-content: center</div>
+      </div>
+      <div class="improvement-item">
+        <div class="improvement-num">#6</div>
+        <div class="improvement-tag tag-high">🟠 High</div>
+        <div class="improvement-desc"><strong>Feature 모바일 그리드</strong><br>1열 → 2열 (UI_Design.md Mobile: 2 columns 기준 적용)</div>
+      </div>
+      <div class="improvement-item">
+        <div class="improvement-num">#7</div>
+        <div class="improvement-tag tag-medium">🟡 Medium</div>
+        <div class="improvement-desc"><strong>BINGO 텍스트 클리핑</strong><br>line-height: 1 → 1.15 + padding-top: 0.1em</div>
+      </div>
+      <div class="improvement-item">
+        <div class="improvement-num">#8</div>
+        <div class="improvement-tag tag-medium">🟡 Medium</div>
+        <div class="improvement-desc"><strong>Feature 섹션 다크 배경</strong><br>흰 배경 → #0C0219 기반 다크 배경 (UI_Design.md Background 기준)</div>
+      </div>
+      <div class="improvement-item">
+        <div class="improvement-num">#9</div>
+        <div class="improvement-tag tag-medium">🟡 Medium</div>
+        <div class="improvement-desc"><strong>globals.css 디자인 토큰 정비</strong><br>--primary: #BD0558 (Host), 컴포넌트 하드코딩값 CSS 변수로 교체</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.page -->
+
+</body>
+</html>

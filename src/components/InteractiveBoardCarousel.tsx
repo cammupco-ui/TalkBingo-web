@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './InteractiveBoardCarousel.module.css';
 
@@ -18,7 +18,15 @@ const CAROUSEL_SCREENSHOTS = [
 
 export default function InteractiveBoardCarousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
     const totalItems = CAROUSEL_SCREENSHOTS.length;
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
 
     const handleCardClick = (index: number) => {
         if (index !== currentIndex) {
@@ -29,6 +37,7 @@ export default function InteractiveBoardCarousel() {
     };
 
     const currentScreen = CAROUSEL_SCREENSHOTS[currentIndex];
+    const radius = isMobile ? 200 : 266;
 
     return (
         <div className={styles.carouselContainer}>
@@ -41,11 +50,13 @@ export default function InteractiveBoardCarousel() {
                     if (diff > totalItems / 2) { diff -= totalItems; } else if (diff < -totalItems / 2) { diff += totalItems; }
                     const isCenter = diff === 0;
                     const theta = (360 / totalItems) * diff;
-                    const radius = 266;
+
                     const distanceRatio = Math.abs(diff) / (totalItems / 2);
                     const opacity = Math.max(0, 1 - distanceRatio * 3.0);
                     let transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
-                    transform += ` rotateX(-2deg) translateY(${Math.abs(diff) * 10}px)`;
+                    transform += isMobile
+                        ? ` rotateX(-2deg) translateY(0px)`
+                        : ` rotateX(-2deg) translateY(${Math.abs(diff) * 10}px)`;
                     if (isCenter) { transform += ` scale(1.2)`; }
                     const zIndex = 100 - Math.abs(diff) * 10;
                     return (
