@@ -13,7 +13,10 @@ function detectLocale(): Locale {
 export function useLanguage(): Locale {
     const [locale, setLocale] = useState<Locale>('ko');
     useEffect(() => {
-        setLocale(detectLocale());
+        const detected = detectLocale();
+        setLocale(detected);
+        document.body.classList.remove('lang-en', 'lang-ko');
+        document.body.classList.add(`lang-${detected}`);
     }, []);
     return locale;
 }

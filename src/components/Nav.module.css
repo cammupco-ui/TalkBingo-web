@@ -38,7 +38,7 @@
    display: flex;
    align-items: center;
    gap: 5px;
-   font-family: 'Nura', system-ui, sans-serif;
+   font-family: 'Nura', var(--font-body);
    font-size: clamp(11px, 1.5vw, 22px);
    font-weight: 800;
    letter-spacing: -0.02em;

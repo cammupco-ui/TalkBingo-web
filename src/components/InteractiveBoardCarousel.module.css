@@ -20,7 +20,7 @@
 }
 
 .carouselTitle {
-    font-family: 'EliceDigitalBaeum', 'Alexandria', sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(22px, 2.0vw, 36px);
     font-weight: 800;
     margin: 0;
@@ -41,7 +41,7 @@
 }
 
 .carouselDesc {
-    font-family: 'EliceDigitalBaeum', 'Alexandria', sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(13px, 1.5vw, 16px);
     font-weight: 400;
     color: rgba(255, 255, 255, 0.8);
@@ -250,7 +250,7 @@
     align-items: center;
     gap: 1px;
     font-size: 0.45rem;
-    font-family: 'EliceDigitalBaeum', sans-serif;
+    font-family: var(--font-body);
     font-weight: 700;
     z-index: 10000;
     pointer-events: none;
@@ -317,7 +317,7 @@
 }
 
 .mobileTitle {
-    font-family: 'EliceDigitalBaeum', 'Alexandria', sans-serif;
+    font-family: var(--font-body);
     font-size: 20px;
     font-weight: 800;
     margin: 0 0 8px 0;
@@ -325,7 +325,7 @@
 }
 
 .mobileDesc {
-    font-family: 'EliceDigitalBaeum', 'Alexandria', sans-serif;
+    font-family: var(--font-body);
     font-size: 14px;
     font-weight: 400;
     color: rgba(255, 255, 255, 0.8);

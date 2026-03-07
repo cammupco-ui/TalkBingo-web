@@ -164,7 +164,7 @@
 }
 
 .weText {
-    font-family: 'EliceDigitalBaeum', sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(24px, 4vw, 36px);
     font-weight: 800;
     color: #fff;
@@ -184,7 +184,7 @@
 }
 
 .bingoHighlight {
-    font-family: 'Nura', system-ui, sans-serif;
+    font-family: 'Nura', var(--font-body);
     font-weight: 800;
     font-size: clamp(48px, 8vw, 76px);
     color: #fff;
@@ -192,7 +192,7 @@
 }
 
 .playText {
-    font-family: 'EliceDigitalBaeum', sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(24px, 4vw, 36px);
     font-weight: 800;
     color: #fff;
@@ -240,7 +240,7 @@
 }
 
 .logoText {
-    font-family: 'Nura', 'Alexandria', system-ui, sans-serif;
+    font-family: 'Nura', var(--font-body);
     font-size: clamp(36px, 6vw, 64px);
     font-weight: 800;
     color: #fff;
@@ -268,7 +268,7 @@
     align-items: center;
     gap: 16px;
     white-space: nowrap;
-    font-family: 'EliceDigitalBaeum', sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(16px, 2vw, 22px);
     font-weight: 800;
     color: #fff;
@@ -649,7 +649,7 @@
 
 
 .coreMessageLine {
-    font-family: 'EliceDigitalBaeum', 'Alexandria', sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(15px, 2.1vw, 27px);
     font-weight: 900;
     color: #FF0077;
@@ -699,7 +699,7 @@
     border-radius: 16px;
     background: #BD0558;
     color: #fff;
-    font-family: 'Nura', 'EliceDigitalBaeum', sans-serif;
+    font-family: 'Nura', var(--font-body);
     font-size: clamp(14px, 1.8vw, 17px);
     font-weight: 900;
     letter-spacing: 0.03em;
@@ -726,7 +726,7 @@
     border-radius: 16px;
     background: #430887;
     color: #fff;
-    font-family: 'Alexandria', 'EliceDigitalBaeum', sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(14px, 1.8vw, 17px);
     font-weight: 700;
     letter-spacing: 0.03em;

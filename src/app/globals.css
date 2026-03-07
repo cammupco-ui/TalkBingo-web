@@ -129,11 +129,22 @@ html {
 }
 
 body {
-  font-family: 'Alexandria', 'EliceDigitalBaeum', sans-serif;
+  --font-body: 'EliceDigitalBaeum', sans-serif;
+  font-family: var(--font-body);
   background: var(--bg);
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+}
+
+body.lang-en {
+  --font-body: 'Alexandria', sans-serif;
+  font-family: var(--font-body);
+}
+
+body.lang-ko {
+  --font-body: 'EliceDigitalBaeum', sans-serif;
+  font-family: var(--font-body);
 }
 
 a {

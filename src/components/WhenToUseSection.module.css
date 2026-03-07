@@ -6,7 +6,7 @@
 /* ===== 제목 ===== */
 .title {
     text-align: center;
-    font-family: 'Nura', 'EliceDigitalBaeum', sans-serif;
+    font-family: 'Nura', var(--font-body);
     font-size: clamp(28px, 5vw, 40px);
     font-weight: 800;
     letter-spacing: -0.03em;
@@ -32,7 +32,7 @@
 }
 
 .item {
-    font-family: 'EliceDigitalBaeum', 'Alexandria', sans-serif;
+    font-family: var(--font-body);
     font-size: clamp(15px, 2vw, 18px);
     color: var(--text-secondary);
     font-weight: 500;
