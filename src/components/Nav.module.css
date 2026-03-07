@@ -7,7 +7,7 @@
    left: 0;
    right: 0;
    z-index: 1050;
-   height: var(--nav-height);
+   height: 44px;
    display: flex;
    align-items: center;
    background: rgba(255, 255, 255, 0.85);
@@ -29,17 +29,17 @@
    align-items: center;
    justify-content: space-between;
    width: 100%;
-   max-width: var(--max-width);
-   margin: 0 auto;
-   padding: 0 24px;
+   max-width: none;
+   margin: 0;
+   padding: 0 20px;
 }
 
 .navLogo {
    display: flex;
    align-items: center;
-   gap: 8px;
+   gap: 5px;
    font-family: 'Nura', system-ui, sans-serif;
-   font-size: clamp(18px, 2.5vw, 36px);
+   font-size: clamp(11px, 1.5vw, 22px);
    font-weight: 800;
    letter-spacing: -0.02em;
    color: #2e0645;
@@ -47,8 +47,8 @@
 }
 
 .navLogoIcon {
-   width: clamp(18px, 2.5vw, 36px);
-   height: clamp(18px, 2.5vw, 36px);
+   width: clamp(11px, 1.5vw, 22px);
+   height: clamp(11px, 1.5vw, 22px);
    display: flex;
    align-items: center;
    justify-content: center;
@@ -101,16 +101,17 @@
    align-items: center;
    justify-content: center;
    flex: 1;
-   height: 44px;
-   border-radius: 8px;
+   height: 26px;
+   width: 26px;
+   border-radius: 6px;
    color: var(--text-secondary);
    background: rgba(0, 0, 0, 0.04);
    transition: all 0.3s var(--ease);
 }
 
 .navSnsLink svg {
-   width: clamp(18px, 2.5vw, 36px);
-   height: clamp(18px, 2.5vw, 36px);
+   width: clamp(11px, 1.5vw, 22px);
+   height: clamp(11px, 1.5vw, 22px);
    stroke-width: 1.5;
 }
 

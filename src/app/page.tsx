@@ -12,12 +12,9 @@ export default function Home() {
     <>
       <InteractiveCardHero />
 
-      {/* ===== PREVIEW 타이틀 프레임 ===== */}
-      <div className={styles.previewSection}>
+      {/* ===== PREVIEW + 캐러셀 (단일 섹션으로 통합 — 레이어 충돌 방지) ===== */}
+      <section className={styles.previewSection}>
         <p className={styles.previewBingoEyebrow}>PREVIEW</p>
-      </div>
-
-      <section className={styles.bingoTransition}>
         <div className={styles.bingoContainer}>
           <div className={styles.bingoCarouselWrapper}>
             <InteractiveBoardCarousel />
@@ -121,7 +118,7 @@ export default function Home() {
 
       <section className={styles.download}>
         <div className="container">
-          <h2 className={styles.downloadTitle}>지금, <span style={{ fontFamily: "'Nura', sans-serif", fontWeight: 900, letterSpacing: '0.04em' }}>TALKBINGO</span>로 대화를 시작하세요.</h2>
+          <h2 className={styles.downloadTitle}>지금, <span style={{ fontFamily: "'Nura', sans-serif", fontWeight: 900, letterSpacing: '0.04em' }}>TALKBINGO</span>로<br className={styles.mobileBreak} /> 대화를 시작하세요.</h2>
           <DownloadButtons />
         </div>
       </section>

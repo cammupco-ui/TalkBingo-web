@@ -108,7 +108,7 @@
   --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.12);
   --shadow-glow: 0 4px 30px var(--primary-glow);
   --max-width: 1200px;
-  --nav-height: 72px;
+  --nav-height: 44px;
   --radius: 16px;
   --radius-sm: 8px;
   --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -262,7 +262,7 @@ button {
 
 @media (max-width: 768px) {
   :root {
-    --nav-height: 64px;
+    --nav-height: 38px;
   }
 
   .container {

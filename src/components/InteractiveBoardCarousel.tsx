@@ -49,9 +49,9 @@ export default function InteractiveBoardCarousel() {
     // 비율 기반 크기 계산
     const deckWidth = isMobile ? Math.round(Math.min(115, viewportWidth * 0.28)) : 196;
     const deckHeight = deckWidth * 2;
-    const perspective = isMobile ? 2400 : 1800;
-    const maxRadius = isMobile ? Math.round(viewportWidth / 2 - deckWidth / 2 - 20) : 400;
-    const radius = isMobile ? Math.min(Math.round(viewportWidth * 0.40), maxRadius) : 400;
+    const perspective = isMobile ? 1200 : 900;
+    const maxRadius = isMobile ? Math.round(viewportWidth / 2 - deckWidth / 2 - 20) : 280;
+    const radius = isMobile ? Math.min(Math.round(viewportWidth * 0.30), maxRadius) : 280;
 
     return (
         <div className={styles.carouselContainer}>
@@ -81,10 +81,10 @@ export default function InteractiveBoardCarousel() {
                     let transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
                     transform += isMobile
                         ? ` rotateX(-2deg) translateY(0px)`
-                        : ` rotateX(-2deg) translateY(${Math.abs(diff) * 10}px)`;
-                    if (isCenter) transform += ` scale(1.2)`;
+                        : ` rotateX(-2deg) translateY(${Math.abs(diff) * -30}px)`;
+                    if (isCenter) transform += isMobile ? ` scale(1.2) translateZ(80px)` : ` scale(1.2) translateZ(40px)`;
 
-                    const zIndex = 100 - Math.abs(diff) * 10;
+                    const zIndex = isCenter ? 9999 : 100 - Math.abs(diff) * 10;
 
                     return (
                         <div
@@ -107,6 +107,15 @@ export default function InteractiveBoardCarousel() {
                                 className={styles.cardImage}
                                 priority={isCenter || Math.abs(diff) === 1}
                             />
+                            {isCenter && (
+                                <div className={styles.interactionHint}>
+                                    <span className={styles.hintClick}>CLICK</span>
+                                    <svg className={styles.hintArrow} width="40" height="14" viewBox="0 0 40 14" fill="none">
+                                        <path d="M2 12 L20 3 L38 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                    </svg>
+                                    <span className={styles.hintText}>게임화면 미리보기</span>
+                                </div>
+                            )}
                         </div>
                     );
                 })}
@@ -127,13 +136,7 @@ export default function InteractiveBoardCarousel() {
                     ))}
                 </p>
             </div>
-            <div className={styles.interactionHint}>
-                <span className={styles.hintClick}>CLICK</span>
-                <svg className={styles.hintArrow} width="40" height="14" viewBox="0 0 40 14" fill="none">
-                    <path d="M2 12 L20 3 L38 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span className={styles.hintText}>게임화면 미리보기</span>
-            </div>
+
         </div>
     );
 }

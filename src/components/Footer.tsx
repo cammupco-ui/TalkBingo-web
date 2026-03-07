@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -7,10 +6,19 @@ export default function Footer() {
             <div className={styles.footerInner}>
                 <div className={styles.footerTop}>
 
+                    {/* 회사 정보 */}
+                    <div className={styles.footerColumn}>
+                        <h4>Built by Cammup Co., Ltd.</h4>
+                        <ul>
+                            <li>
+                                <a href="mailto:cammupco@gmail.com">cammupco@gmail.com</a>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div className={styles.footerColumn}>
                         <h4>서비스</h4>
                         <ul>
-                            <li><Link href="/">소개</Link></li>
                             <li><a href="https://talkbingo.app" target="_blank" rel="noopener noreferrer">웹 플레이</a></li>
                         </ul>
                     </div>
@@ -24,7 +32,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className={styles.footerBottom}>
-                    <span>© 2026 Cammupco. All rights reserved.</span>
+                    <span>© 2026 Cammup Co., Ltd. All rights reserved.</span>
                     <span>Made with ❤️ for better conversations</span>
                 </div>
             </div>

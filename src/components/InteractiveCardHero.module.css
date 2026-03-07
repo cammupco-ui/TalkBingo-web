@@ -11,6 +11,8 @@
     align-items: center;
     cursor: default;
     user-select: none;
+    z-index: 0;
+    isolation: isolate;
 }
 
 /* 하단 전환 벡터 */
@@ -321,7 +323,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    padding-top: calc(30% - 60px);
+    top: calc(30% - 60px);
     padding-left: calc(35% + 182px + 5vw);
     pointer-events: none;
     opacity: 0;
@@ -406,6 +408,34 @@
     height: 100%;
 }
 
+
+
+/* ===== 카드 순차 스파클 애니메이션 ===== */
+@keyframes cardSparkle {
+
+    0%,
+    88%,
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    91% {
+        opacity: 1;
+        transform: scale(1.4);
+    }
+
+    94% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    98% {
+        opacity: 0;
+        transform: scale(0.2);
+    }
+}
+
 .card {
     position: absolute;
     width: 140px;
@@ -420,6 +450,23 @@
     z-index: 1;
     transition: left 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), top 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
     will-change: transform, left, top;
+}
+
+/* 카드 3곳에 순차 반짝이는 스파클 (box-shadow 다중 위치) */
+.card::after {
+    content: '';
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    top: 12px;
+    right: 12px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 210, 245, 0.5) 60%, transparent 100%);
+    box-shadow: 0 0 5px 2px rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    animation: cardSparkle 10s ease-in-out infinite;
+    animation-delay: var(--sparkle-delay, 0s);
 }
 
 .balanceCard {
@@ -524,18 +571,29 @@
     border-color: #F0E7F4;
 }
 
+/* 선택된 카드: 글로우 애니메이션 정지 */
+.selectedCard.balanceCard,
+.selectedCard.truthCard {
+    animation: none;
+}
+
+.selectedCard.balanceCard::after,
+.selectedCard.truthCard::after {
+    display: none;
+}
+
 /* ===== 스크롤 힌트 (뷰포트 하단 고정) ===== */
 .scrollDown {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 40;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 60px;
-    padding-bottom: 28px;
+    padding-top: 24px;
+    padding-bottom: 20px;
     background: linear-gradient(to bottom,
             transparent 0%,
             rgba(0, 0, 0, 0.45) 40%,
@@ -636,14 +694,14 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 220px;
+    width: 280px;
     padding: 14px 20px;
     border-radius: 16px;
     background: #BD0558;
     color: #fff;
-    font-family: 'EliceDigitalBaeum', sans-serif;
+    font-family: 'Nura', 'EliceDigitalBaeum', sans-serif;
     font-size: clamp(14px, 1.8vw, 17px);
-    font-weight: 700;
+    font-weight: 900;
     letter-spacing: 0.03em;
     text-decoration: none;
     box-shadow: 0 4px 20px rgba(189, 5, 88, 0.45);
@@ -663,12 +721,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 220px;
+    width: 280px;
     padding: 14px 20px;
     border-radius: 16px;
     background: #430887;
     color: #fff;
-    font-family: 'EliceDigitalBaeum', sans-serif;
+    font-family: 'Alexandria', 'EliceDigitalBaeum', sans-serif;
     font-size: clamp(14px, 1.8vw, 17px);
     font-weight: 700;
     letter-spacing: 0.03em;
@@ -762,15 +820,15 @@
     }
 
     .cardLabel {
-        font-size: 0.5rem;
+        font-size: 0.35rem;
     }
 
     .visualQuestion {
-        font-size: 0.75rem;
+        font-size: 0.53rem;
     }
 
     .visualChoiceBtn {
-        font-size: 0.65rem;
+        font-size: 0.46rem;
         padding: 4px 2px;
     }
 
@@ -784,7 +842,8 @@
         align-items: center;
         justify-content: flex-start;
         padding-left: 0;
-        padding-top: 43%;
+        padding-top: 24px;
+        top: calc(22% + 158px);
     }
 
     .messageContent {
@@ -852,15 +911,15 @@
     }
 
     .cardLabel {
-        font-size: 0.45rem;
+        font-size: 0.32rem;
     }
 
     .visualQuestion {
-        font-size: 0.65rem;
+        font-size: 0.46rem;
     }
 
     .visualChoiceBtn {
-        font-size: 0.55rem;
+        font-size: 0.39rem;
         padding: 3px 2px;
     }
 

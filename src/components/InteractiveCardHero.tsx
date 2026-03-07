@@ -55,8 +55,9 @@ export default function InteractiveCardHero() {
     const [showCoreLine1, setShowCoreLine1] = useState(false);
     const [showCoreLine2, setShowCoreLine2] = useState(false);
 
-    // 헤로 가시성 (scrollDown 표시 제어)
-    const [heroVisible, setHeroVisible] = useState(true);
+    // 스크롤 힌트 - footer 근처에서 숨김
+    const [nearFooter, setNearFooter] = useState(false);
+    const [hasScrolled, setHasScrolled] = useState(false);
     const heroRef = useRef<HTMLElement>(null);
 
     // 카드 인터랙션 상태
@@ -93,17 +94,17 @@ export default function InteractiveCardHero() {
         window.addEventListener('resize', check);
         const timer = setTimeout(() => setIsMounted(true), 100);
 
-        // scrollDown 가시성: heroSection이 화면에서 벗어나면 숨김
-        const section = heroRef.current;
-        let observer: IntersectionObserver | null = null;
-        if (section) {
-            observer = new IntersectionObserver(
-                ([entry]) => setHeroVisible(entry.isIntersecting),
-                { threshold: 0.1 }
-            );
-            observer.observe(section);
-        }
-        return () => { window.removeEventListener('resize', check); clearTimeout(timer); observer?.disconnect(); };
+        // scrollDown - footer 근처에서 숨김
+        const handleScroll = () => {
+            const footer = document.querySelector('footer');
+            const footerHeight = footer ? footer.getBoundingClientRect().height : 150;
+            const distFromBottom = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+            setNearFooter(distFromBottom < footerHeight + 100);
+            if (window.scrollY > 60) setHasScrolled(true);
+        };
+        handleScroll();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => { window.removeEventListener('resize', check); window.removeEventListener('scroll', handleScroll); clearTimeout(timer); };
     }, []);
 
     // 애니메이션 타임라인
@@ -241,14 +242,14 @@ export default function InteractiveCardHero() {
                             const currentTransform = `translate(calc(-50% + ${pos.xPx * mobileScale + (pinned?.dx ?? 0)}px), calc(-50% + ${pos.yPx * mobileScale + (pinned?.dy ?? 0)}px)) rotate(${pos.rot}deg) scale(${pos.scale * mobileCardScale})`;
                             const currentTransition = 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s';
                             const cardStyle: React.CSSProperties = isSelected
-                                ? { left: isMobile ? '50%' : '35%', top: isMobile ? '30%' : '30%', transform: `translate(-50%, -50%) rotate(0deg) scale(${isMobile ? 1.5 : 2.6})`, zIndex: 999, cursor: 'default', transitionDelay: '0s', opacity: 1, transition: 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s' }
+                                ? { left: isMobile ? '50%' : '35%', top: isMobile ? '22%' : '30%', transform: `translate(-50%, -50%) rotate(0deg) scale(${isMobile ? 1.5 : 2.6})`, zIndex: 999, cursor: 'default', transitionDelay: '0s', opacity: 1, transition: 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s' }
                                 : { left: '50%', top: isMobile ? '30%' : '40%', transform: currentTransform, opacity: isMounted ? 1 : 0, zIndex: isAnimatingOut ? 999 : (Math.round(Math.abs(pos.depth) * 10) + 10), cursor: isDone ? 'grab' : 'default', transition: pinned ? 'opacity 0.8s' : currentTransition, transitionDelay: (!isMounted || animatingOutIdx !== null) ? '0s' : `${0.3 + i * 0.3}s` };
                             const isSelectedStatus = isSelected || isAnimatingOut;
                             // 핀된 카드는 패럴랩스 미적용, 나머지는 카드별 독립 offset 적용
                             const parallaxTransform = isSelectedStatus ? `translate(0px, 0px)` : pinned ? `translate(0px, 0px)` : `translate(${isMobile ? 0 : cardOffsets[i].x * pos.depth * 2}px, ${isMobile ? 0 : cardOffsets[i].y * pos.depth * 2}px)`;
                             return (
                                 <div key={i} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', transform: parallaxTransform, zIndex: isSelectedStatus ? 999 : (Math.round(Math.abs(pos.depth) * 10) + 10) }}>
-                                    <div className={`${styles.card} ${card.type === 'balance' ? styles.balanceCard : styles.truthCard} ${isSelectedStatus ? styles.selectedCard : ''}`} style={{ ...cardStyle, pointerEvents: 'auto' }}
+                                    <div className={`${styles.card} ${card.type === 'balance' ? styles.balanceCard : styles.truthCard} ${isSelectedStatus ? styles.selectedCard : ''}`} style={{ ...cardStyle, pointerEvents: 'auto', '--sparkle-delay': `${i * 1.25}s` } as React.CSSProperties}
                                         onMouseDown={(e) => handleCardDragStart(e, i)}
                                         onClick={(e) => { if (dragRef.current?.hasDragged) return; e.stopPropagation(); handleSelectCard(isSelected ? null : i); }}>
                                         <div className={styles.cardContent}>
@@ -295,7 +296,7 @@ export default function InteractiveCardHero() {
 
             </section>
             {/* 스크롤 힌트 - heroSection 바깥, position:fixed 정상 동작 */}
-            <div className={styles.scrollDown} style={{ opacity: heroVisible && !isDone ? 1 : 0, transition: 'opacity 0.5s ease' }}>
+            <div className={styles.scrollDown} style={{ opacity: !nearFooter ? 1 : 0, transition: 'opacity 0.5s ease' }}>
                 <span>스크롤</span>
                 <div className={styles.scrollArrow} />
             </div>
