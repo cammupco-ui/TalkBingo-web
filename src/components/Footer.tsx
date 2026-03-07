@@ -1,6 +1,10 @@
+'use client';
+
 import styles from './Footer.module.css';
+import { useTranslation } from '@/lib/i18n';
 
 export default function Footer() {
+    const t = useTranslation();
     return (
         <footer className={styles.footer}>
             <div className={styles.footerInner}>
@@ -17,16 +21,16 @@ export default function Footer() {
                     </div>
 
                     <div className={styles.footerColumn}>
-                        <h4>서비스</h4>
+                        <h4>{t.footer.service}</h4>
                         <ul>
-                            <li><a href="https://talkbingo.app" target="_blank" rel="noopener noreferrer">웹 플레이</a></li>
+                            <li><a href="https://talkbingo.app" target="_blank" rel="noopener noreferrer">{t.footer.webPlay}</a></li>
                         </ul>
                     </div>
                     <div className={styles.footerColumn}>
-                        <h4>지원</h4>
+                        <h4>{t.footer.support}</h4>
                         <ul>
-                            <li><a href="https://talkbingo.app/privacy.html" target="_blank" rel="noopener noreferrer">개인정보처리방침</a></li>
-                            <li><a href="mailto:cammupco@gmail.com">문의하기</a></li>
+                            <li><a href="https://talkbingo.app/privacy.html" target="_blank" rel="noopener noreferrer">{t.footer.privacy}</a></li>
+                            <li><a href="mailto:cammupco@gmail.com">{t.footer.contact}</a></li>
                             <li><a href="https://play.google.com/store/apps/details?id=com.cammupco.talkbingo" target="_blank" rel="noopener noreferrer">Google Play</a></li>
                         </ul>
                     </div>

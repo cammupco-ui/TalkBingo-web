@@ -3,22 +3,31 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import styles from './InteractiveBoardCarousel.module.css';
+import { useTranslation } from '@/lib/i18n';
 
-const CAROUSEL_SCREENSHOTS = [
-    { src: '/images/carousel/IMG_1.png', label: '홈 화면', title: '메인홈', desc: '"새 게임"을 누르고, 대화하고 싶은 사람을 부르세요', color: '#FF4D8D' },
-    { src: '/images/carousel/IMG_2.png', label: '게임 설정', title: '빙고 보드', desc: '5x5보드. 25칸을 가진 빙고 입니다', color: '#A855F7' },
-    { src: '/images/carousel/IMG_3.png', label: '빙고 보드', title: '빙고 셀', desc: '한칸을 눌러서 빙고를 시작하세요', color: '#3B82F6' },
-    { src: '/images/carousel/IMG_4.png', label: '게임 진행', title: '밸런스 퀴즈', desc: '두 선택지 중에 더 마음에 드는 것을 고른 후, 상대방에게 이유를 알려주세요', color: '#F59E0B' },
-    { src: '/images/carousel/IMG_6_2.png', label: '밸런스 게임', title: '진실게임 퀴즈', desc: '나의 생각을 입력하고, 상대방에게 설명해 주세요', color: '#7F28FF' },
-    { src: '/images/carousel/IMG_5.png', label: '실시간 채팅', title: '공감 받기', desc: '상대방에게 공감을 받으면, "빙고 셀"을 획득 할 수 있습니다', color: '#10B981' },
-    { src: '/images/carousel/IMG_8.png', label: '결과 화면', title: '비공감', desc: '상대방에게 공감을 얻지 못하면, 3턴 뒤에 "미니게임"에서 승리하고, 빙고셀을 다시 획득하세요', color: '#EF4444' },
-    { src: '/images/carousel/IMG_10_1.png', label: '상대방 셀 뺏기', title: '상대방 셀 뺏기', desc: '빙고를 완성하기 위해 상대방셀에 도전하세요', color: '#F97316' },
-    { src: '/images/carousel/GAME_1.png', label: '미니게임', title: '미니게임', desc: '당신의 도전을 위해 다양한 미니게임이 있습니다, 최대한 많은 점수를 획득하세요', color: '#06B6D4' },
-    { src: '/images/carousel/IMG_12.png', label: '마이 페이지', title: '빙고라인', desc: '최대3줄 까지 빙고라인을 만드실 수 있어요', color: '#06B6D4' },
-    { src: '/images/carousel/IMG_13.png', label: '초대 화면', title: '게임종료', desc: '빙고라인 한줄 마다, "게임 지속 여부"를 결정 하실 수 있어요', color: '#EC4899' },
+const CAROUSEL_COLORS = ['#FF4D8D', '#A855F7', '#3B82F6', '#F59E0B', '#7F28FF', '#10B981', '#EF4444', '#F97316', '#06B6D4', '#06B6D4', '#EC4899'];
+const CAROUSEL_SRCS = [
+    '/images/carousel/IMG_1.png',
+    '/images/carousel/IMG_2.png',
+    '/images/carousel/IMG_3.png',
+    '/images/carousel/IMG_4.png',
+    '/images/carousel/IMG_6_2.png',
+    '/images/carousel/IMG_5.png',
+    '/images/carousel/IMG_8.png',
+    '/images/carousel/IMG_10_1.png',
+    '/images/carousel/GAME_1.png',
+    '/images/carousel/IMG_12.png',
+    '/images/carousel/IMG_13.png',
 ];
 
 export default function InteractiveBoardCarousel() {
+    const t = useTranslation();
+    const CAROUSEL_SCREENSHOTS = t.carousel.screens.map((s, i) => ({
+        ...s,
+        src: CAROUSEL_SRCS[i],
+        color: CAROUSEL_COLORS[i],
+    }));
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
     const [viewportWidth, setViewportWidth] = useState(375);
@@ -59,7 +68,7 @@ export default function InteractiveBoardCarousel() {
                 <h3 className={styles.carouselTitle} style={{ color: currentScreen.color }}>{currentScreen.title}</h3>
             </div>
 
-            {/* 기존 수평 3D 원통 캐러셀 */}
+            {/* 수평 3D 원통 캐러셀 */}
             <div
                 className={styles.deck}
                 style={isMobile ? {
@@ -88,7 +97,6 @@ export default function InteractiveBoardCarousel() {
 
                     return (
                         <div
-                            // center card에 splashKey를 포함 → 매번 DOM 재생성 → animation 재실행
                             key={isCenter ? `center-${splashKey}` : screen.src}
                             className={`${styles.card} ${isCenter ? styles.centerCard : ''}`}
                             style={{
@@ -113,7 +121,7 @@ export default function InteractiveBoardCarousel() {
                                     <svg className={styles.hintArrow} width="40" height="14" viewBox="0 0 40 14" fill="none">
                                         <path d="M2 12 L20 3 L38 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                    <span className={styles.hintText}>게임화면 미리보기</span>
+                                    <span className={styles.hintText}>{t.carousel.hintText}</span>
                                 </div>
                             )}
                         </div>

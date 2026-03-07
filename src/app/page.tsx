@@ -1,3 +1,5 @@
+'use client';
+
 import Image from 'next/image';
 import styles from './page.module.css';
 import InteractiveCardHero from '@/components/InteractiveCardHero';
@@ -6,8 +8,15 @@ import ChatReveal from '@/components/ChatReveal';
 import WhenToUseSection from '@/components/WhenToUseSection';
 import { IconChat, IconVoice, IconGame, IconGlobe, IconCommunity, IconTrophy } from '@/components/FeatureIcons';
 import DownloadButtons from '@/components/DownloadButtons';
+import { useTranslation } from '@/lib/i18n';
+
+const FEATURE_ICONS = [IconChat, IconVoice, IconGame, IconGlobe, IconCommunity, IconTrophy];
 
 export default function Home() {
+  const t = useTranslation();
+  const chatLines = t.chat.title.split('\n');
+  const downloadLines = t.downloadSection.title.split('\n');
+
   return (
     <>
       <InteractiveCardHero />
@@ -48,8 +57,12 @@ export default function Home() {
             </div>
           </div>
           <div className={styles.chatTextContent}>
-            <h2 className={styles.chatTitle}>빙고게임은 핑계,<br />퀴즈에 응답하면서,<br className={styles.mobileBreak} />{' '}진짜 대화를 시작하세요!</h2>
-            <p className={styles.chatDesc}>전략적으로 빙고셀을 선택하고, 진솔하게 둘만의 채팅을 이어나가세요.</p>
+            <h2 className={styles.chatTitle}>
+              {chatLines[0]}
+              {chatLines.length > 1 && <><br />{chatLines[1]}</>}
+              {chatLines.length > 2 && <><br className={styles.mobileBreak} />{' '}{chatLines[2]}</>}
+            </h2>
+            <p className={styles.chatDesc}>{t.chat.desc}</p>
           </div>
         </div>
       </section>
@@ -77,52 +90,35 @@ export default function Home() {
         </svg>
       </div>
 
-      {/* ===== SPECIAL FEATURE 마지막 섹션 ===== */}
+      {/* ===== SPECIAL FEATURE ===== */}
       <section className={styles.specialFeatures}>
         <div className="container">
-          <h2 className={styles.specialFeatureTitle}>SPECIAL FEATURE</h2>
+          <h2 className={styles.specialFeatureTitle}>{t.features.title}</h2>
           <div className={styles.featureGrid}>
-            <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}><IconChat /></div>
-              <h3 className={styles.featureTitle}>관계별 맞춤 질문</h3>
-              <p className={styles.featureDesc}>연인, 가족, 친구 등 관계에 따라 최적화된 질문이 제공됩니다.</p>
-            </div>
-            <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}><IconVoice /></div>
-              <h3 className={styles.featureTitle}>음성 문자 변환</h3>
-              <p className={styles.featureDesc}>음성으로 채팅을 보낼 수 있습니다.</p>
-            </div>
-            <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}><IconGame /></div>
-              <h3 className={styles.featureTitle}>미니게임</h3>
-              <p className={styles.featureDesc}>상대방 셀을 눌러서 도전하세요. 미니게임에서 승리하면 상대방 셀을 쟁취할 수 있습니다.</p>
-            </div>
-            <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}><IconGlobe /></div>
-              <h3 className={styles.featureTitle}>다국어 지원</h3>
-              <p className={styles.featureDesc}>지금은 한국어와 영어를 지원하지만, 점차 다국어 지원을 확대할 것입니다.</p>
-            </div>
-            <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}><IconCommunity /></div>
-              <h3 className={styles.featureTitle}>커뮤니티</h3>
-              <p className={styles.featureDesc}>가까운 지역에 있는 사람들과 대화로 새로운 인연을 만드세요.</p>
-            </div>
-            <div className={`card ${styles.featureCard}`}>
-              <div className={styles.featureIcon}><IconTrophy /></div>
-              <h3 className={styles.featureTitle}>빙고게임 기록</h3>
-              <p className={styles.featureDesc}>사랑하는 사람들과의 의미 있었던 대화를 기록으로 남기세요.</p>
-            </div>
+            {t.features.items.map((item, i) => {
+              const Icon = FEATURE_ICONS[i];
+              return (
+                <div key={i} className={`card ${styles.featureCard}`}>
+                  <div className={styles.featureIcon}><Icon /></div>
+                  <h3 className={styles.featureTitle}>{item.title}</h3>
+                  <p className={styles.featureDesc}>{item.desc}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       <section className={styles.download}>
         <div className="container">
-          <h2 className={styles.downloadTitle}>지금, <span style={{ fontFamily: "'Nura', sans-serif", fontWeight: 900, letterSpacing: '0.04em' }}>TALKBINGO</span>로<br className={styles.mobileBreak} /> 대화를 시작하세요.</h2>
+          <h2 className={styles.downloadTitle}>
+            {downloadLines[0]}{' '}
+            {downloadLines.length > 1 && <><span style={{ fontFamily: "'Nura', sans-serif", fontWeight: 900, letterSpacing: '0.04em' }}>TALKBINGO</span>{downloadLines[1]}</>}
+            {downloadLines.length > 2 && <><br className={styles.mobileBreak} />{' '}{downloadLines[2]}</>}
+          </h2>
           <DownloadButtons />
         </div>
       </section>
     </>
   );
 }
-

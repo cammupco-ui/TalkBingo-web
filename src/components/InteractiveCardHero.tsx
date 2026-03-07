@@ -3,21 +3,11 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './InteractiveCardHero.module.css';
+import { useTranslation } from '@/lib/i18n';
 
 interface BalanceCard { type: 'balance'; question: string; choiceA: string; choiceB: string; emoji: string; preview: string; }
 interface TruthCard { type: 'truth'; question: string; emoji: string; preview: string; }
 type CardData = BalanceCard | TruthCard;
-
-const CARDS: CardData[] = [
-    { type: 'balance', question: '더 선호하는 취미는?', choiceA: '만들기', choiceB: '스포츠', emoji: '🎨', preview: '만들기 vs 스포츠' },
-    { type: 'balance', question: '내 탕수육 취향은?', choiceA: '찍먹', choiceB: '부먹', emoji: '🍖', preview: '찍먹 vs 부먹' },
-    { type: 'balance', question: '더 끌리는 쪽은?', choiceA: '분석파', choiceB: '직관파', emoji: '🤔', preview: '분석 vs 직관' },
-    { type: 'balance', question: '가고 싶은 여름 여행은?', choiceA: '산', choiceB: '바다', emoji: '🏖️', preview: '산 vs 바다' },
-    { type: 'truth', question: '지금 가장 보고 싶은것은?', emoji: '👀', preview: '보고 싶은 것' },
-    { type: 'truth', question: '생일날, 받고 싶은 것은?', emoji: '🎁', preview: '생일 선물' },
-    { type: 'truth', question: '최근 가장 즐거웠을 때는?', emoji: '😄', preview: '가장 즐거운 때' },
-    { type: 'truth', question: '올해 연말 계획은?', emoji: '🗓️', preview: '연말 계획' },
-];
 
 const CARD_DEPTHS = [-0.28, 0.22, -0.14, 0.32, -0.20, 0.18, -0.08, 0.26];
 const CIRCLE_POSITIONS = Array.from({ length: 8 }).map((_, i) => {
@@ -29,6 +19,9 @@ const CIRCLE_POSITIONS = Array.from({ length: 8 }).map((_, i) => {
 const CARD_LERP_SPEEDS = [0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10, 0.10];
 
 export default function InteractiveCardHero() {
+    const t = useTranslation();
+    const CARDS: CardData[] = t.cards as unknown as CardData[];
+
     const containerRef = useRef<HTMLDivElement>(null);
     const mouseRef = useRef({ x: 0, y: 0 });
     const rafRef = useRef<number>(0);
@@ -107,16 +100,6 @@ export default function InteractiveCardHero() {
         return () => { window.removeEventListener('resize', check); window.removeEventListener('scroll', handleScroll); clearTimeout(timer); };
     }, []);
 
-    // 애니메이션 타임라인
-    // 0~3s: 카드들 한 장씩 등장 (staggered delay)
-    // 3.0s: "우리" 페이드인
-    // 3.6s: "BINGO" 페이드인
-    // 4.2s: "한판 할까?" 페이드인
-    // 5.5s: 텍스트 전체 페이드아웃
-    // 6.0s: 로고 아이콘 페이드인
-    // 6.5s: "TALKBINGO" 텍스트 페이드인
-    // 8.0s: "대화하며..." 1줄 페이드인
-    // 9.2s: "밸런스 빙고게임" 페이드인
     useEffect(() => {
         if (!isMounted) return;
         const t1 = setTimeout(() => setShowWe(true), 3000);
@@ -146,7 +129,6 @@ export default function InteractiveCardHero() {
                 let changed = false;
                 const prevOffsets = cardOffsetsRef.current;
                 const newOffsets = prevOffsets.map((o, i) => {
-                    // chain: 카드0은 마우스를, 나머지는 앞 카드를 따라감 (순차 wave 효과)
                     const chainTarget = i === 0
                         ? { x: targetX, y: targetY }
                         : prevOffsets[i - 1];
@@ -194,11 +176,12 @@ export default function InteractiveCardHero() {
 
     const visibleCards = isMobile ? CARDS.slice(0, 8) : CARDS;
 
+    const coreLines = t.hero.coreMessage.split('\n');
+
     return (
         <>
             <section ref={heroRef} className={styles.heroSection} onMouseMove={handlePointerMove} onTouchMove={handlePointerMove} onMouseUp={handlePointerUp}>
                 <div className={styles.heroBackground} />
-
 
                 <div className={`${styles.auroraBlob} ${styles.auroraBlob1}`} />
                 <div className={`${styles.auroraBlob} ${styles.auroraBlob2}`} />
@@ -210,13 +193,13 @@ export default function InteractiveCardHero() {
                         {/* 중앙 타이포그래피 영역 */}
                         <div className={styles.centerTypography} style={{ opacity: isMounted ? 1 : 0, top: isMobile ? '30%' : '40%', transform: `translate(-50%, -50%) translate(${isMobile ? 0 : cardOffsets[CARDS.length].x * 0.05}px, ${isMobile ? 0 : cardOffsets[CARDS.length].y * 0.05}px)` }}>
 
-                            {/* 페이즈 1: 우리 BINGO 한판할까? */}
+                            {/* 페이즈 1: We / BINGO / play */}
                             <div className={`${styles.textGroup} ${textFaded ? styles.textGroupFaded : ''}`}>
-                                <div className={`${styles.weText} ${showWe ? styles.textVisible : ''}`}>우리</div>
+                                <div className={`${styles.weText} ${showWe ? styles.textVisible : ''}`}>{t.hero.phase1We}</div>
                                 <div className={`${styles.bingoRow} ${showBingo ? styles.textVisible : ''}`}>
                                     <span className={styles.bingoHighlight}>BINGO</span>
                                 </div>
-                                <div className={`${styles.playText} ${showPlay ? styles.textVisible : ''}`}>한판 할까?</div>
+                                <div className={`${styles.playText} ${showPlay ? styles.textVisible : ''}`}>{t.hero.phase1Play}</div>
                             </div>
 
                             {/* 페이즈 2: 로고 */}
@@ -245,7 +228,6 @@ export default function InteractiveCardHero() {
                                 ? { left: isMobile ? '50%' : '35%', top: isMobile ? '22%' : '30%', transform: `translate(-50%, -50%) rotate(0deg) scale(${isMobile ? 1.5 : 2.6})`, zIndex: 999, cursor: 'default', transitionDelay: '0s', opacity: 1, transition: 'transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s' }
                                 : { left: '50%', top: isMobile ? '30%' : '40%', transform: currentTransform, opacity: isMounted ? 1 : 0, zIndex: isAnimatingOut ? 999 : (Math.round(Math.abs(pos.depth) * 10) + 10), cursor: isDone ? 'grab' : 'default', transition: pinned ? 'opacity 0.8s' : currentTransition, transitionDelay: (!isMounted || animatingOutIdx !== null) ? '0s' : `${0.3 + i * 0.3}s` };
                             const isSelectedStatus = isSelected || isAnimatingOut;
-                            // 핀된 카드는 패럴랩스 미적용, 나머지는 카드별 독립 offset 적용
                             const parallaxTransform = isSelectedStatus ? `translate(0px, 0px)` : pinned ? `translate(0px, 0px)` : `translate(${isMobile ? 0 : cardOffsets[i].x * pos.depth * 2}px, ${isMobile ? 0 : cardOffsets[i].y * pos.depth * 2}px)`;
                             return (
                                 <div key={i} style={{ position: 'absolute', inset: 0, pointerEvents: 'none', transform: parallaxTransform, zIndex: isSelectedStatus ? 999 : (Math.round(Math.abs(pos.depth) * 10) + 10) }}>
@@ -271,9 +253,9 @@ export default function InteractiveCardHero() {
                             {lastSelectedRef.current !== null && (
                                 <div className={styles.messageContent}>
                                     {CARDS[lastSelectedRef.current].type === 'balance' ? (
-                                        <><h3 className={styles.kickMessageBalance}>두 가지 선택, 하나의 진짜 대화</h3><p className={styles.emotionMessage}>왜 그걸 골랐는지 설명하는 순간,<br />우리는 서로를 더 잘 이해하게 됩니다.</p></>
+                                        <><h3 className={styles.kickMessageBalance}>{t.hero.msgBalanceTitle}</h3><p className={styles.emotionMessage}>{t.hero.msgBalanceBody.split('\n').map((line, i) => <React.Fragment key={i}>{line}{i === 0 && <br />}</React.Fragment>)}</p></>
                                     ) : (
-                                        <><h3 className={styles.kickMessageTruth}>하나의 질문, 진짜 나의 이야기</h3><p className={styles.emotionMessage}>솔직한 한마디를 꺼내는 순간,<br />대화는 더 깊어집니다.</p></>
+                                        <><h3 className={styles.kickMessageTruth}>{t.hero.msgTruthTitle}</h3><p className={styles.emotionMessage}>{t.hero.msgTruthBody.split('\n').map((line, i) => <React.Fragment key={i}>{line}{i === 0 && <br />}</React.Fragment>)}</p></>
                                     )}
                                 </div>
                             )}
@@ -283,21 +265,23 @@ export default function InteractiveCardHero() {
                 </div>
 
 
-                {/* 코어 메시지 - cardContainer 바로 아래 */}
+                {/* 코어 메시지 */}
                 <div className={`${styles.coreMessage} ${showCoreLine1 ? styles.coreMessageShow : ''}`} style={{ opacity: selectedCardIdx !== null ? 0 : undefined, pointerEvents: selectedCardIdx !== null ? 'none' : undefined }}>
-                    <p className={`${styles.coreMessageLine} ${showCoreLine1 ? styles.coreLineVisible : ''}`}>밸런스, 진실게임 퀴즈로 대화하고<br />빙고게임도 하고</p>
+                    <p className={`${styles.coreMessageLine} ${showCoreLine1 ? styles.coreLineVisible : ''}`}>
+                        {coreLines[0]}{coreLines.length > 1 && <><br />{coreLines[1]}</>}
+                    </p>
 
                     {/* CTA 버튼 */}
                     <div className={`${styles.ctaButtons} ${showCoreLine2 ? styles.ctaVisible : ''}`}>
-                        <BingoGameButton className={styles.ctaPrimary} />
-                        <AppDownloadButton />
+                        <BingoGameButton className={styles.ctaPrimary} label={t.hero.ctaPrimary} />
+                        <AppDownloadButton storeLabels={t.store} />
                     </div>
                 </div>
 
             </section>
-            {/* 스크롤 힌트 - heroSection 바깥, position:fixed 정상 동작 */}
+            {/* 스크롤 힌트 */}
             <div className={styles.scrollDown} style={{ opacity: !nearFooter ? 1 : 0, transition: 'opacity 0.5s ease' }}>
-                <span>스크롤</span>
+                <span>{t.hero.scrollHint}</span>
                 <div className={styles.scrollArrow} />
             </div>
         </>
@@ -305,20 +289,18 @@ export default function InteractiveCardHero() {
 }
 
 /* ─────────────────────────────────────────────────────────
-   "빙고게임 하러가기" — 앱 설치 시 앱으로, 미설치 시 웹으로
+   빙고게임 하러가기 — 앱 설치 시 앱으로, 미설치 시 웹으로
    ───────────────────────────────────────────────────────── */
-function BingoGameButton({ className }: { className: string }) {
+function BingoGameButton({ className, label }: { className: string; label: string }) {
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
         const APP_SCHEME = 'talkbingo://';
         const WEB_URL = 'https://talkbingo.app';
 
-        // 커스텀 스킴 시도 → 앱이 있으면 포그라운드 전환, 없으면 visibilitychange 없이 타임아웃
         const start = Date.now();
         window.location.href = APP_SCHEME;
 
         setTimeout(() => {
-            // 페이지가 여전히 visible (앱이 열리지 않음) → 웹으로 이동
             if (!document.hidden && Date.now() - start < 2000) {
                 window.open(WEB_URL, '_blank', 'noopener,noreferrer');
             }
@@ -327,15 +309,15 @@ function BingoGameButton({ className }: { className: string }) {
 
     return (
         <button onClick={handleClick} className={className}>
-            빙고게임 하러가기
+            {label}
         </button>
     );
 }
 
 /* ─────────────────────────────────────────────────────────
-   "앱 다운로드" — 플랫폼별 스토어 자동 연결
+   앱 다운로드 — 플랫폼별 스토어 자동 연결
    ───────────────────────────────────────────────────────── */
-function AppDownloadButton() {
+function AppDownloadButton({ storeLabels }: { storeLabels: { ios: string; android: string; macos: string; windows: string; web: string } }) {
     type Platform = 'ios' | 'android' | 'macos' | 'windows' | 'web';
     const [platform, setPlatform] = React.useState<Platform>('web');
 
@@ -347,37 +329,22 @@ function AppDownloadButton() {
         } else if (/Android/.test(ua)) {
             setPlatform('android');
         } else if (/Mac/.test(platform) || /Macintosh/.test(ua)) {
-            // macOS — App Store (Apple Silicon 앱 설치 가능)
             setPlatform('macos');
         } else if (/Win/.test(platform) || /Windows/.test(ua)) {
             setPlatform('windows');
         }
     }, []);
 
-    const STORE_MAP: Record<Platform, { href: string; label: string }> = {
-        ios: {
-            href: 'https://apps.apple.com/app/talkbingo/id6740272133',
-            label: 'App Store에서 다운로드',
-        },
-        android: {
-            href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo',
-            label: 'Google Play에서 다운로드',
-        },
-        macos: {
-            href: 'https://apps.apple.com/app/talkbingo/id6740272133',
-            label: 'Mac App Store에서 다운로드',
-        },
-        windows: {
-            href: 'https://www.microsoft.com/store/search/talkbingo',
-            label: 'Microsoft Store에서 검색',
-        },
-        web: {
-            href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo',
-            label: '앱 다운로드 받기',
-        },
+    const STORE_MAP: Record<Platform, { href: string }> = {
+        ios: { href: 'https://apps.apple.com/app/talkbingo/id6740272133' },
+        android: { href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo' },
+        macos: { href: 'https://apps.apple.com/app/talkbingo/id6740272133' },
+        windows: { href: 'https://www.microsoft.com/store/search/talkbingo' },
+        web: { href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo' },
     };
 
-    const { href, label } = STORE_MAP[platform];
+    const { href } = STORE_MAP[platform];
+    const label = storeLabels[platform];
 
     return (
         <a href={href} target="_blank" rel="noopener noreferrer" className={styles.ctaSecondary}>
@@ -385,4 +352,3 @@ function AppDownloadButton() {
         </a>
     );
 }
-

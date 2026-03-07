@@ -2,18 +2,36 @@
 
 import React from 'react';
 import styles from '@/app/page.module.css';
+import { useTranslation } from '@/lib/i18n';
 
 type Platform = 'ios' | 'android' | 'macos' | 'windows' | 'web';
 
-const STORE: Record<Platform, { href: string; label: string; sub: string }> = {
-    ios: { href: 'https://apps.apple.com/app/talkbingo/id6740272133', label: 'App Store', sub: 'DOWNLOAD ON THE' },
-    android: { href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo', label: 'Google Play', sub: 'GET IT ON' },
-    macos: { href: 'https://apps.apple.com/app/talkbingo/id6740272133', label: 'Mac App Store', sub: 'DOWNLOAD ON THE' },
-    windows: { href: 'https://www.microsoft.com/store/search/talkbingo', label: 'Microsoft Store', sub: 'GET IT ON' },
-    web: { href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo', label: 'Google Play', sub: 'GET IT ON' },
+const STORE_HREFS: Record<Platform, string> = {
+    ios: 'https://apps.apple.com/app/talkbingo/id6740272133',
+    android: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo',
+    macos: 'https://apps.apple.com/app/talkbingo/id6740272133',
+    windows: 'https://www.microsoft.com/store/search/talkbingo',
+    web: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo',
+};
+
+const STORE_SUBS: Record<Platform, string> = {
+    ios: 'DOWNLOAD ON THE',
+    android: 'GET IT ON',
+    macos: 'DOWNLOAD ON THE',
+    windows: 'GET IT ON',
+    web: 'GET IT ON',
+};
+
+const STORE_LABELS: Record<Platform, string> = {
+    ios: 'App Store',
+    android: 'Google Play',
+    macos: 'Mac App Store',
+    windows: 'Microsoft Store',
+    web: 'Google Play',
 };
 
 export default function DownloadButtons() {
+    const t = useTranslation();
     const [platform, setPlatform] = React.useState<Platform>('web');
 
     React.useEffect(() => {
@@ -30,7 +48,7 @@ export default function DownloadButtons() {
         }
     }, []);
 
-    // "빙고게임 하러가기": 앱 커스텀 스킴 시도 → 1.2s 후 미설치면 웹 폴백
+    // 빙고게임 하러가기: 앱 커스텀 스킴 시도 → 1.2s 후 미설치면 웹 폴백
     const handleBingoClick = (e: React.MouseEvent) => {
         e.preventDefault();
         const start = Date.now();
@@ -42,18 +60,20 @@ export default function DownloadButtons() {
         }, 1200);
     };
 
-    const { href, label, sub } = STORE[platform];
+    const href = STORE_HREFS[platform];
+    const sub = STORE_SUBS[platform];
+    const label = STORE_LABELS[platform];
 
     return (
         <div className={styles.downloadButtons}>
-            {/* 빙고게임 하러가기 — 앱 우선 딥링크 */}
+            {/* Play Now — 앱 우선 딥링크 */}
             <button
                 onClick={handleBingoClick}
                 className={`${styles.storeBadge} ${styles.storeBadgePrimary}`}
             >
                 <div>
-                    <div className={styles.storeBadgeLabel}>PLAY NOW</div>
-                    <div className={styles.storeBadgeName}>빙고게임 하러가기</div>
+                    <div className={styles.storeBadgeLabel}>{t.download.playNow}</div>
+                    <div className={styles.storeBadgeName}>{t.download.bingoGame}</div>
                 </div>
             </button>
             {/* 스토어 다운로드 — 플랫폼 자동 감지 */}
