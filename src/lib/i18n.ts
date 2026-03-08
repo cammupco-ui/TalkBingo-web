@@ -119,7 +119,7 @@ export const translations = {
         hero: {
             phase1We: 'Let\'s',
             phase1Play: 'play BINGO!',
-            coreMessage: 'Chat through balance & truth quizzes,\nand play bingo together!',
+            coreMessage: 'Chat and play together —\nBalance Q&A, Truth Game & Bingo',
             scrollHint: 'Scroll',
             ctaPrimary: 'Play Now',
             msgBalanceTitle: 'Two choices, one real conversation',
@@ -181,7 +181,7 @@ export const translations = {
             contact: 'Contact Us',
         },
         chat: {
-            title: 'Bingo is just the excuse —\nanswer quizzes\nand start real conversations!',
+            title: 'Bingo is just the excuse —\nreal conversations start with every answer',
             desc: 'Strategically pick your bingo cells, and keep the chat honest and heartfelt.',
         },
         features: {
@@ -196,7 +196,7 @@ export const translations = {
             ],
         },
         downloadSection: {
-            title: 'Start your conversations\nwith TALKBINGO\ntoday.',
+            title: 'Your TALKBINGO starts here',
         },
     },
 } as const;
