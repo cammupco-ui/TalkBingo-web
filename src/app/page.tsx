@@ -15,7 +15,6 @@ const FEATURE_ICONS = [IconChat, IconVoice, IconGame, IconGlobe, IconCommunity, 
 export default function Home() {
   const t = useTranslation();
   const chatLines = t.chat.title.split('\n');
-  const downloadLines = t.downloadSection.title.split('\n');
 
   return (
     <>
@@ -112,9 +111,21 @@ export default function Home() {
       <section className={styles.download}>
         <div className="container">
           <h2 className={styles.downloadTitle}>
-            {downloadLines[0]}{' '}
-            {downloadLines.length > 1 && <><span style={{ fontFamily: "'Nura', sans-serif", fontWeight: 900, letterSpacing: '0.04em' }}>TALKBINGO</span>{downloadLines[1]}</>}
-            {downloadLines.length > 2 && <><br className={styles.mobileBreak} />{' '}{downloadLines[2]}</>}
+            {t.downloadSection.title.split('\n').map((line, i, arr) => (
+              <span key={i}>
+                {line.split('TALKBINGO').map((part, j, parts) => (
+                  <span key={j}>
+                    {part}
+                    {j < parts.length - 1 && (
+                      <span style={{ fontFamily: "'Nura', sans-serif", fontWeight: 900, letterSpacing: '0.04em' }}>
+                        TALKBINGO
+                      </span>
+                    )}
+                  </span>
+                ))}
+                {i < arr.length - 1 && <br className={styles.mobileBreak} />}
+              </span>
+            ))}
           </h2>
           <DownloadButtons />
         </div>

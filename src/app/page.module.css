@@ -306,6 +306,11 @@
     letter-spacing: -0.03em;
 }
 
+:global(.lang-en) .downloadTitle {
+    font-size: 28px;
+}
+
+
 .downloadDesc {
     font-size: 18px;
     color: rgba(255, 255, 255, 0.7);
@@ -431,6 +436,10 @@
 
     .downloadTitle {
         font-size: 28px;
+    }
+
+    :global(.lang-en) .downloadTitle {
+        font-size: 22px;
     }
 
     .chatLayout {
