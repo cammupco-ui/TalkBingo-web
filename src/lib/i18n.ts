@@ -123,9 +123,9 @@ export const translations = {
             scrollHint: 'Scroll',
             ctaPrimary: 'Play Now',
             msgBalanceTitle: 'Two choices, one real conversation',
-            msgBalanceBody: 'The moment you explain why you chose it,\nyou understand each other better.',
+            msgBalanceBody: 'Get to know each other better\nas you explain your choice!',
             msgTruthTitle: 'One question, your true story',
-            msgTruthBody: 'The moment you say something honest,\nthe conversation gets deeper.',
+            msgTruthBody: 'Open up, be honest, and\ndeepen the conversation!',
         },
         cards: [
             { type: 'balance', question: 'Preferred hobby?', choiceA: 'Creating', choiceB: 'Sports', emoji: '🎨', preview: 'Create vs Sports' },
