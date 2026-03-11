@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 export const metadata: Metadata = {
   title: 'TalkBingo — 대화로 빙고를 완성하세요!',
   description: '연인, 가족, 친구와 함께하는 대화 빙고 게임. 서로에 대해 새로운 것을 발견하세요!',
-  keywords: 'TalkBingo, 톡빙고, 빙고톡, 커플게임, 대화게임, 아이스브레이킹',
+  keywords: 'TalkBingo, 톡빙고, 밸런스 퀴즈, 진실게임, 빙고톡, 커플게임, 대화게임, 아이스브레이킹',
   verification: {
     google: 'fqpwJmRavOiEm0JwHjJJPGhp_VHqEvMTX1CRNLypn6g',
   },
