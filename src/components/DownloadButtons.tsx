@@ -76,9 +76,9 @@ export default function DownloadButtons() {
                     <div className={styles.storeBadgeName}>{t.download.bingoGame}</div>
                 </div>
             </button>
-            {/* 스토어 다운로드 — 플랫폼 자동 감지 */}
+            {/* 스토어 다운로드 — 백엔드 API 라우트로 연결 */}
             <a
-                href={href}
+                href="/api/download"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.storeBadge} ${styles.storeBadgeSecondary}`}
