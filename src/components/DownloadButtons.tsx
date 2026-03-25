@@ -7,11 +7,11 @@ import { useTranslation } from '@/lib/i18n';
 type Platform = 'ios' | 'android' | 'macos' | 'windows' | 'web';
 
 const STORE_HREFS: Record<Platform, string> = {
-    ios: 'https://apps.apple.com/app/talkbingo/id6740272133',
-    android: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo',
-    macos: 'https://apps.apple.com/app/talkbingo/id6740272133',
+    ios: 'https://apps.apple.com/app/id6759347728',
+    android: 'https://play.google.com/store/apps/details?id=com.talkbingo.app',
+    macos: 'https://apps.apple.com/app/id6759347728',
     windows: 'https://www.microsoft.com/store/search/talkbingo',
-    web: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo',
+    web: 'https://play.google.com/store/apps/details?id=com.talkbingo.app',
 };
 
 const STORE_SUBS: Record<Platform, string> = {
@@ -48,19 +48,28 @@ export default function DownloadButtons() {
         }
     }, []);
 
-    // 빙고게임 하러가기: 앱 커스텀 스킴 시도 → 1.2s 후 미설치면 웹 폴백
+    const href = STORE_HREFS[platform];
+
+    // 빙고게임 하러가기: 앱 커스텀 스킴 시도 → 1.2s 후 미설치면 해당 기기 스토어로 폴백
     const handleBingoClick = (e: React.MouseEvent) => {
         e.preventDefault();
+        
+        if (platform === 'web' || platform === 'macos' || platform === 'windows') {
+            window.open(href, '_blank', 'noopener,noreferrer');
+            return;
+        }
+
         const start = Date.now();
         window.location.href = 'talkbingo://';
+        
         setTimeout(() => {
             if (!document.hidden && Date.now() - start < 2000) {
-                window.open('https://talkbingo.app', '_blank', 'noopener,noreferrer');
+                // 모바일에서 팝업 차단 방지를 위해 현재 창 이동 사용
+                window.location.href = href;
             }
         }, 1200);
     };
 
-    const href = STORE_HREFS[platform];
     const sub = STORE_SUBS[platform];
     const label = STORE_LABELS[platform];
 
