@@ -50,12 +50,13 @@ export default function DownloadButtons() {
 
     const href = STORE_HREFS[platform];
 
-    // 빙고게임 하러가기: 앱 커스텀 스킴 시도 → 1.2s 후 미설치면 해당 기기 스토어로 폴백
+    // 빙고게임 하러가기: 데스크탑일 경우 바로 연결, 모바일은 앱 커스텀 스킴 시도 후 폴백
     const handleBingoClick = (e: React.MouseEvent) => {
         e.preventDefault();
         
-        if (platform === 'web' || platform === 'macos' || platform === 'windows') {
-            window.open(href, '_blank', 'noopener,noreferrer');
+        const isDesktop = !(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+        if (isDesktop) {
+            window.open('/api/download', '_blank', 'noopener,noreferrer');
             return;
         }
 
@@ -65,7 +66,7 @@ export default function DownloadButtons() {
         setTimeout(() => {
             if (!document.hidden && Date.now() - start < 2000) {
                 // 모바일에서 팝업 차단 방지를 위해 현재 창 이동 사용
-                window.location.href = href;
+                window.location.href = '/api/download';
             }
         }, 1200);
     };

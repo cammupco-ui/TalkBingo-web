@@ -289,20 +289,26 @@ export default function InteractiveCardHero() {
 }
 
 /* ─────────────────────────────────────────────────────────
-   빙고게임 하러가기 — 앱 설치 시 앱으로, 미설치 시 웹으로
+   빙고게임 하러가기 — 앱 설치 시 앱으로, 미설치 시 앱 스토어로
    ───────────────────────────────────────────────────────── */
 function BingoGameButton({ className, label }: { className: string; label: string }) {
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        const APP_SCHEME = 'talkbingo://';
-        const WEB_URL = 'https://talkbingo.app';
+        
+        // 데스크탑 체크
+        const isDesktop = !(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+        if (isDesktop) {
+            window.open('/api/download', '_blank', 'noopener,noreferrer');
+            return;
+        }
 
+        const APP_SCHEME = 'talkbingo://';
         const start = Date.now();
         window.location.href = APP_SCHEME;
 
         setTimeout(() => {
             if (!document.hidden && Date.now() - start < 2000) {
-                window.open(WEB_URL, '_blank', 'noopener,noreferrer');
+                window.location.href = '/api/download';
             }
         }, 1200);
     };
