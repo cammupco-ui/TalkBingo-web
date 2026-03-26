@@ -336,11 +336,11 @@ function AppDownloadButton({ storeLabels }: { storeLabels: { ios: string; androi
     }, []);
 
     const STORE_MAP: Record<Platform, { href: string }> = {
-        ios: { href: 'https://apps.apple.com/app/talkbingo/id6740272133' },
-        android: { href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo' },
-        macos: { href: 'https://apps.apple.com/app/talkbingo/id6740272133' },
+        ios: { href: 'https://apps.apple.com/app/id6759347728' },
+        android: { href: 'https://play.google.com/store/apps/details?id=com.talkbingo.app' },
+        macos: { href: 'https://apps.apple.com/app/id6759347728' },
         windows: { href: 'https://www.microsoft.com/store/search/talkbingo' },
-        web: { href: 'https://play.google.com/store/apps/details?id=com.cammupco.talkbingo' },
+        web: { href: 'https://play.google.com/store/apps/details?id=com.talkbingo.app' },
     };
 
     const { href } = STORE_MAP[platform];

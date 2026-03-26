@@ -31,7 +31,7 @@ export default function Footer() {
                         <ul>
                             <li><a href="https://talkbingo.app/privacy.html" target="_blank" rel="noopener noreferrer">{t.footer.privacy}</a></li>
                             <li><a href="mailto:cammupco@gmail.com">{t.footer.contact}</a></li>
-                            <li><a href="https://play.google.com/store/apps/details?id=com.cammupco.talkbingo" target="_blank" rel="noopener noreferrer">Google Play</a></li>
+                            <li><a href="https://play.google.com/store/apps/details?id=com.talkbingo.app" target="_blank" rel="noopener noreferrer">Google Play</a></li>
                         </ul>
                     </div>
                 </div>
