@@ -1,0 +1,11 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.talkbingo.app",
+    "sha256_cert_fingerprints": [
+      "AB:5E:6D:E1:D3:34:43:5E:2B:90:A3:BC:BE:6A:64:4E:AE:EF:37:EE:D6:59:B5:7C:DA:78:2D:02:3E:F7:00:6C",
+      "21:18:71:E3:29:E8:4B:50:2F:CF:3A:C9:F5:80:88:1E:29:BB:74:A3:46:D8:0B:4A:A0:22:71:5B:38:47:3B:D6"
+    ]
+  }
+}]

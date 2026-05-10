@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalkBingo (톡빙고) - 대화가 인연이 되는 공간</title>
+  <meta name="description" content="빙고 게임을 통해 서로의 속마음을 깊게 확인하고 새로운 인연을 만들어가는 인터랙티브 대화 플랫폼.">
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Alexandria (EN) & Noto Sans KR (KO) -->
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600;800&family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Noto Sans KR', 'Alexandria', sans-serif;
+      margin: 0;
+      overflow: hidden; /* Fixed One-Screen Layout */
+      background: linear-gradient(-45deg, #FF6B6B, #4ECDC4, #A8B2FF, #FFD166);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: #fff;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    /* Glassmorphism Classes */
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 24px;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center; justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 50;
+    }
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal-content {
+      background: #ffffff;
+      color: #333;
+      border-radius: 28px;
+      padding: 0;
+      width: 90%;
+      max-width: 500px;
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+    .card-hover:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.25);
+    }
+    
+    .floating { animation: floating 3s ease-in-out infinite; }
+    @keyframes floating {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+  </style>
+</head>
+<body class="h-screen w-screen flex flex-col justify-between">
+
+  <!-- Navigation -->
+  <nav class="w-full p-6 flex justify-between items-center z-10 glass mx-auto mt-4 w-[95%] max-w-6xl rounded-full">
+    <div class="text-2xl font-extrabold tracking-wider">TalkBingo</div>
+    <div class="flex gap-4">
+      <button onclick="openModal('tutorialModal')" class="font-semibold px-4 py-2 bg-white/20 hover:bg-white/30 rounded-full transition">튜토리얼</button>
+      <a href="app.html" class="font-bold px-6 py-2 bg-white text-[#FF6B6B] rounded-full hover:shadow-lg transition">👉 참여하기</a>
+    </div>
+  </nav>
+
+  <!-- Hero Text -->
+  <main class="flex-grow flex flex-col items-center justify-center text-center px-4 z-10">
+    <div class="glass p-8 md:p-12 floating">
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">대화가 인연이 되는 공간</h1>
+      <p class="text-lg md:text-xl font-medium mb-8 max-w-xl mx-auto opacity-90">
+        빙고는 그저 거들 뿐.<br/>서로의 생각을 맞추고, 공유하며 마음을 여세요.
+      </p>
+      <div class="flex justify-center gap-4">
+        <a href="app.html" class="px-8 py-4 bg-white text-[#FF6B6B] font-bold rounded-full shadow-lg hover:scale-105 transition">웹에서 바로 플레이</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- 3 Service Cards (Bottom) -->
+  <footer class="w-full pb-10 px-4 z-10">
+    <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Card 1: Combi -->
+      <button onclick="openModal('combiModal')" class="glass p-6 text-left card-hover transition md:h-48 flex flex-col justify-between group">
+        <div>
+          <span class="text-xs font-bold bg-white/30 px-3 py-1 rounded-full mb-3 inline-block">분석형 코어 엔진</span>
+          <h3 class="text-2xl font-extrabold mb-1">🤖 콤비 퀴즈</h3>
+          <p class="text-sm opacity-80 leading-snug">가치관 밸런스 퀴즈를 통한 개인화 데이터 분석 및 대화형 AI 플랫폼.</p>
+        </div>
+        <div class="mt-4 font-semibold text-sm group-hover:underline">자세히 보기 &rarr;</div>
+      </button>
+
+      <!-- Card 2: Private -->
+      <button onclick="openModal('privateModal')" class="glass p-6 text-left card-hover transition md:h-48 flex flex-col justify-between group">
+        <div>
+          <span class="text-xs font-bold bg-white/30 px-3 py-1 rounded-full mb-3 inline-block">프라이빗 모드</span>
+          <h3 class="text-2xl font-extrabold mb-1">💌 새 게임 (지인 초대)</h3>
+          <p class="text-sm opacity-80 leading-snug">연인, 베프와 초대 코드를 공유하여 속 깊은 이야기를 프라이빗하게 시작하세요.</p>
+        </div>
+        <div class="mt-4 font-semibold text-sm group-hover:underline">자세히 보기 &rarr;</div>
+      </button>
+
+      <!-- Card 3: Public -->
+      <button onclick="openModal('publicModal')" class="glass p-6 text-left card-hover transition md:h-48 flex flex-col justify-between group">
+        <div>
+          <span class="text-xs font-bold bg-[#4ECDC4]/80 px-3 py-1 rounded-full mb-3 inline-block">퍼블릭 소셜 매칭</span>
+          <h3 class="text-2xl font-extrabold mb-1">🌍 새 친구 찾기</h3>
+          <p class="text-sm opacity-80 leading-snug">운명적인 취향 일치! 로비에 공개된 방에서 새로운 인연들과 가볍게 대화하세요.</p>
+        </div>
+        <div class="mt-4 font-semibold text-sm group-hover:underline">자세히 보기 &rarr;</div>
+      </button>
+
+    </div>
+  </footer>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- Modal 1: Combi Quiz -->
+  <div id="combiModal" class="modal-overlay" onclick="closeModal(event, 'combiModal')">
+    <div class="modal-content">
+      <div class="bg-gradient-to-r from-orange-400 to-red-400 h-32 flex items-center justify-center">
+         <span class="text-6xl">🤖</span>
+      </div>
+      <div class="p-8">
+        <h2 class="text-2xl font-black mb-2 text-gray-800">콤비 퀴즈 (COMBI QUIZ)</h2>
+        <p class="text-gray-500 font-bold mb-4">AI 분석 · 유저 이해를 위한 근간</p>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          심심할 땐 자유롭게 콤비 모드를 통해 나를 알아보세요.<br/><br/>
+          단순한 퀴즈를 넘어, 유저의 대답을 통해 생각과 성향을 이해하고 뼈 때리는 조언부터 공감까지 반응합니다. 향후 맞춤형 추천 서비스나 개인화 AI 캐릭터 생성의 바탕이 되는 톡빙고의 코어 서비스입니다.
+        </p>
+        <button onclick="forceCloseModal('combiModal')" class="w-full py-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl transition">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Private -->
+  <div id="privateModal" class="modal-overlay" onclick="closeModal(event, 'privateModal')">
+    <div class="modal-content">
+      <div class="bg-gradient-to-r from-pink-400 to-purple-500 h-32 flex items-center justify-center">
+         <span class="text-6xl">💌</span>
+      </div>
+      <div class="p-8">
+        <h2 class="text-2xl font-black mb-2 text-gray-800">새 게임 (지인 초대)</h2>
+        <p class="text-gray-500 font-bold mb-4">프라이빗 빙고 · 대화의 시작</p>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          가까운 연인이나 친구, 가족의 진짜 속마음이 궁금할 때!<br/><br/>
+          카카오톡 등으로 초대 링크를 공유하여 1:1 대화방을 여세요. 재미있는 밸런스 게임을 통해 평소에 묻기 어려웠던 주제들로 방대한 소통과 교감이 시작됩니다.
+        </p>
+        <button onclick="forceCloseModal('privateModal')" class="w-full py-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl transition">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Public -->
+  <div id="publicModal" class="modal-overlay" onclick="closeModal(event, 'publicModal')">
+    <div class="modal-content">
+      <div class="bg-gradient-to-r from-teal-400 to-blue-500 h-32 flex items-center justify-center">
+         <span class="text-6xl">🌍</span>
+      </div>
+      <div class="p-8">
+        <h2 class="text-2xl font-black mb-2 text-gray-800">새 친구 찾기</h2>
+        <p class="text-gray-500 font-bold mb-4">소셜 매칭 · 로비 접속</p>
+        <p class="text-gray-600 mb-6 leading-relaxed">
+          나와 관심사가 통하는 새로운 사람들과 대화할 수 있는 곳!<br/><br/>
+          퍼블릭 오픈 대기실에 나만의 퀴즈 방을 만들거나 다른 유저가 만든 방에 참여해 보세요. 게임 코드를 통해 아이스브레이킹을 하며 쉽게 인연으로 발전할 수 있습니다.
+        </p>
+        <button onclick="forceCloseModal('publicModal')" class="w-full py-4 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl transition">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Tutorial -->
+  <div id="tutorialModal" class="modal-overlay" onclick="closeModal(event, 'tutorialModal')">
+    <div class="modal-content max-w-2xl">
+      <div class="bg-gray-900 h-24 flex items-center justify-center px-6 border-b border-gray-800">
+         <h2 class="text-xl font-black text-white">톡빙고 1분 튜토리얼 🎬</h2>
+      </div>
+      <div class="p-8 bg-gray-50">
+        
+        <div class="space-y-6">
+          <div class="flex items-start gap-4">
+            <div class="bg-[#FF6B6B] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 mt-1">1</div>
+            <div>
+              <h4 class="font-bold text-lg text-gray-800">주제와 상대방 선택</h4>
+              <p class="text-gray-600">수백 개의 질문 팩 중 원하는 주제를 고르고, 혼자(콤비), 친구, 혹은 공개 매칭으로 상대를 픽(Pick)합니다!</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="bg-[#4ECDC4] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 mt-1">2</div>
+            <div>
+              <h4 class="font-bold text-lg text-gray-800">질문에 답하고 마음 열기</h4>
+              <p class="text-gray-600">질문에 교대로 대답하며 서로의 답변을 확인합니다. 내 마음이 끌리는 선택지를 편하게 고르세요.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="bg-[#A8B2FF] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 mt-1">3</div>
+            <div>
+              <h4 class="font-bold text-lg text-gray-800">대화와 소통의 스파크</h4>
+              <p class="text-gray-600">상대방의 선택을 볼 때마다 대화의 주제가 자연스럽게 끊이지 않고 이어집니다. 당신만의 새로운 인연을 만들어가세요.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-gray-200 gap-4 flex flex-col md:flex-row">
+           <a href="app.html" class="flex-1 block text-center py-4 bg-[#FF6B6B] hover:bg-red-500 text-white font-bold text-lg rounded-xl shadow-lg transition">앱스토어 다운로드</a>
+           <a href="app.html" class="flex-1 block text-center py-4 bg-gray-800 hover:bg-black text-white font-bold text-lg rounded-xl shadow-lg transition">바로 대화해 보기 &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts for Modals -->
+  <script>
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+    function forceCloseModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+    // Close modal if clicked outside the content area
+    function closeModal(event, id) {
+      if (event.target.id === id) {
+        forceCloseModal(id);
+      }
+    }
+  </script>
+</body>
+</html>
