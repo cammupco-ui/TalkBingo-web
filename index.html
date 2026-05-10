@@ -6,6 +6,16 @@
   <title>TalkBingo (톡빙고) - 대화가 인연이 되는 공간</title>
   <meta name="description" content="빙고 게임을 통해 서로의 속마음을 깊게 확인하고 새로운 인연을 만들어가는 인터랙티브 대화 플랫폼.">
   <link rel="icon" type="image/png" href="favicon.png" />
+  <script>
+    // If invite code is present, go straight to the game
+    (function() {
+      var params = new URLSearchParams(window.location.search);
+      var code = params.get('code');
+      if (code) {
+        window.location.replace('app.html?code=' + encodeURIComponent(code));
+      }
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Alexandria (EN) & Noto Sans KR (KO) -->
   <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;600;800&family=Noto+Sans+KR:wght@400;600;800&display=swap" rel="stylesheet">
