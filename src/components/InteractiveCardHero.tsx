@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './InteractiveCardHero.module.css';
 import { useTranslation } from '@/lib/i18n';
+import { getStoreUrl } from '@/lib/storeRedirect';
 
 interface BalanceCard { type: 'balance'; question: string; choiceA: string; choiceB: string; emoji: string; preview: string; }
 interface TruthCard { type: 'truth'; question: string; emoji: string; preview: string; }
@@ -294,21 +295,22 @@ export default function InteractiveCardHero() {
 function BingoGameButton({ className, label }: { className: string; label: string }) {
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        
-        // 데스크탑 체크
+
+        // 데스크탑이면 Flutter 웹 빙고게임으로 바로 진입 (스토어 X)
         const isDesktop = !(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
         if (isDesktop) {
-            window.open('/api/download', '_blank', 'noopener,noreferrer');
+            window.location.href = '/app.html';
             return;
         }
 
+        // 모바일은 앱 딥링크 시도 후 스토어 폴백
         const APP_SCHEME = 'talkbingo://';
         const start = Date.now();
         window.location.href = APP_SCHEME;
 
         setTimeout(() => {
             if (!document.hidden && Date.now() - start < 2000) {
-                window.location.href = '/api/download';
+                window.location.href = getStoreUrl();
             }
         }, 1200);
     };
@@ -344,7 +346,12 @@ function AppDownloadButton({ storeLabels }: { storeLabels: { ios: string; androi
     const label = storeLabels[platform];
 
     return (
-        <a href="/api/download" target="_blank" rel="noopener noreferrer" className={styles.ctaSecondary}>
+        <a
+            href={getStoreUrl(platform)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.ctaSecondary}
+        >
             {label}
         </a>
     );

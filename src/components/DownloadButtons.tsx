@@ -3,6 +3,7 @@
 import React from 'react';
 import styles from '@/app/page.module.css';
 import { useTranslation } from '@/lib/i18n';
+import { getStoreUrl } from '@/lib/storeRedirect';
 
 type Platform = 'ios' | 'android' | 'macos' | 'windows' | 'web';
 
@@ -50,23 +51,23 @@ export default function DownloadButtons() {
 
     const href = STORE_HREFS[platform];
 
-    // 빙고게임 하러가기: 데스크탑일 경우 바로 연결, 모바일은 앱 커스텀 스킴 시도 후 폴백
+    // 빙고게임 하러가기: 데스크탑은 Flutter 웹 게임으로, 모바일은 앱 딥링크 시도 후 스토어 폴백
     const handleBingoClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        
+
         const isDesktop = !(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
         if (isDesktop) {
-            window.open('/api/download', '_blank', 'noopener,noreferrer');
+            window.location.href = '/app.html';
             return;
         }
 
         const start = Date.now();
         window.location.href = 'talkbingo://';
-        
+
         setTimeout(() => {
             if (!document.hidden && Date.now() - start < 2000) {
                 // 모바일에서 팝업 차단 방지를 위해 현재 창 이동 사용
-                window.location.href = '/api/download';
+                window.location.href = getStoreUrl();
             }
         }, 1200);
     };
@@ -86,9 +87,9 @@ export default function DownloadButtons() {
                     <div className={styles.storeBadgeName}>{t.download.bingoGame}</div>
                 </div>
             </button>
-            {/* 스토어 다운로드 — 백엔드 API 라우트로 연결 */}
+            {/* 스토어 다운로드 — 클라이언트에서 platform 감지 후 직링크 */}
             <a
-                href="/api/download"
+                href={getStoreUrl(platform)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${styles.storeBadge} ${styles.storeBadgeSecondary}`}

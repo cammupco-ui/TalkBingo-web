@@ -1,7 +1,12 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
+
+// Runs before React hydrates: if the URL carries an invite ?code=XXXXXX,
+// jump straight into the Flutter web bingo game so the host's board opens.
+const INVITE_REDIRECT = `(function(){try{var p=new URLSearchParams(window.location.search);var c=p.get('code');if(c){window.location.replace('/app.html?code='+encodeURIComponent(c));}}catch(e){}})();`;
 
 export const metadata: Metadata = {
   title: 'TalkBingo — 대화로 빙고를 완성하세요!',
@@ -26,6 +31,13 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
+      <head>
+        <Script
+          id="invite-code-redirect"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: INVITE_REDIRECT }}
+        />
+      </head>
       <body>
         <Nav />
         <main style={{ paddingTop: 'var(--nav-height)' }}>{children}</main>
